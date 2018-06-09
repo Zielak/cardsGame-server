@@ -1,5 +1,5 @@
 import Conditions from './conditions'
-import {Base, IBaseOptions} from './base'
+import { Base, IBaseOptions } from './base'
 
 export interface IContainerOptions extends IBaseOptions {
   conditions: Conditions
@@ -9,7 +9,7 @@ export class Container extends Base {
 
   conditions: Conditions
 
-  constructor(options:IContainerOptions) {
+  constructor(options: IContainerOptions) {
     super(options)
 
     // set of conditions used during gameplay

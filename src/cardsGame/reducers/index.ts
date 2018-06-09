@@ -1,6 +1,4 @@
-const reducers = {
+export default {
   createArrayReducer: require('./arrayReducer'),
   players: require('./players'),
 }
-
-module.exports = reducers

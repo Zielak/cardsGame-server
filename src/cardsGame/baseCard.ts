@@ -45,5 +45,3 @@ export class BaseCard extends Base {
   canBeTakenBy() { }
 
 }
-
-module.exports = BaseCard

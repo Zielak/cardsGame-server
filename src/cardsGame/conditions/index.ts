@@ -1,6 +1,6 @@
 import { Player } from '../player'
 
-module.exports = {
+export default {
   isPlayersTurn: (state, player) => {
     return state.players.currentPlayer === player
   },

@@ -18,5 +18,3 @@ export class ClassicCard extends BaseCard {
   }
 
 }
-
-module.exports = ClassicCard
