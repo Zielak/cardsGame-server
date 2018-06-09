@@ -1,11 +1,11 @@
-const {
+import {
   Command,
   Deck,
   Pile,
   Hand,
   Player,
   Presets,
-} = require('../../cardsGame/index')
+} from '../../cardsGame'
 
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
@@ -35,7 +35,7 @@ const command = class GameStartCommand extends Command {
       // state.clients.forEach(client => {
       [0, 1].forEach(client => {
         const newPlayer = new Player({
-          clientId: client,
+          clientId: '' + client,
           name: randomName(),
         })
         this.context.createdPlayers.push(newPlayer)

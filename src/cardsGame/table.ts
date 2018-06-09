@@ -8,7 +8,7 @@ import utils from '../../shared/utils'
  * so we're not going to assume the dimensions.
  */
 
-export default class Table {
+export class Table {
 
   width
   height

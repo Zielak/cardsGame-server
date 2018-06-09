@@ -1,13 +1,13 @@
-import Container from '../container'
+import { Container, IContainerOptions } from '../container'
 
 /**
  * TODO: Should ensure that none of the cards in hand
  * are visible to other players
  */
 
-class Hand extends Container {
+export class Hand extends Container {
 
-  constructor(options = {}) {
+  constructor(options: IContainerOptions) {
     super({
       ...options,
       type: options.type || 'hand',
@@ -20,6 +20,7 @@ class Hand extends Container {
     if (element.type === 'card') {
       element.show && element.show()
     }
+    return this
   }
 
   removeChild(element) {
@@ -28,6 +29,7 @@ class Hand extends Container {
     if (element.type === 'card') {
       element.show && element.hide()
     }
+    return this
   }
 
 }

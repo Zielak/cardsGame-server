@@ -1,15 +1,13 @@
-import Command from './command'
+import { Command } from '../command'
 
-class NextPlayerCommand extends Command {
+export default class NextPlayer extends Command {
 
   execute(invoker, state, reducer) {
     reducer.players.next(state)
   }
 
-  undo(state, reducer){
+  undo(state, reducer) {
     reducer.players.prev(state)
   }
 
 }
-
-module.exports = NextPlayerCommand

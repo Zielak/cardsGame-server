@@ -1,4 +1,7 @@
-export default {
-  createArrayReducer: require('./arrayReducer'),
-  players: require('./players'),
+import createArrayReducer from './arrayReducer'
+import playerReducer from './players'
+
+export const Reducers = {
+  createArrayReducer,
+  playerReducer
 }

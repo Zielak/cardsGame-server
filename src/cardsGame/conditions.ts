@@ -9,7 +9,7 @@ export default class Conditions extends Map {
 
   context
 
-  constructor(set = [], context = null) {
+  constructor(set: Array<Function> = [], context: Base | null = null) {
     super()
     Object.keys(set).forEach(key => {
       this.set(key, set[key])

@@ -1,14 +1,11 @@
 import * as EventEmitter from 'eventemitter3'
 import CommandManager from './commandManager'
-
-const maybeConvertToArray = (element) => {
-  return !Array.isArray(element) ? [element] : [...element]
-}
+import { toArray } from './utils'
 
 const eventTypeMatches = (playerEvent, actionContext) => {
   // does eventType match?
   if (actionContext.eventType) {
-    const eventTypes = maybeConvertToArray(actionContext.eventType)
+    const eventTypes = toArray(actionContext.eventType)
     return eventTypes.some(type =>
       type === playerEvent.eventType
     )
@@ -34,7 +31,7 @@ const reporterMatches = (playerEvent, actionContext) => {
 const elementMatches = (playerEvent, actionContext) => {
   if (actionContext.element) {
     // Many elements might get selected
-    const playerElements = maybeConvertToArray(playerEvent.element)
+    const playerElements = toArray(playerEvent.element)
     const contextProps = Object.keys(actionContext.element)
     // Every required element MUST have the same props as described in context
     return playerElements.every(element =>
@@ -63,7 +60,7 @@ export class Game extends EventEmitter {
   reducer
   commandManager
 
-  constructor(options:IGameOptions) {
+  constructor(options: IGameOptions) {
     super()
 
     this.actions = options.actions
@@ -71,7 +68,7 @@ export class Game extends EventEmitter {
 
     this.commandManager = new CommandManager()
   }
-  
+
   actionCompleted(resolve, actionName) {
     return status => {
       console.info('Action complete:', status)
@@ -79,7 +76,7 @@ export class Game extends EventEmitter {
       this.emit(Game.events.ACTION_COMPLETED, actionName, status)
     }
   }
-  
+
   actionFailed(reject, actionName) {
     return status => {
       console.warn('Action failed:', status)
@@ -127,7 +124,7 @@ export class Game extends EventEmitter {
       if (action === undefined) {
         reject(`Unknown action.`)
       }
-      
+
       const context = {
         data: data,
         ...action.context
@@ -171,7 +168,7 @@ export class Game extends EventEmitter {
     const actionKeys = Object.keys(actions)
 
     const matchedContext = actionKeys.filter(actionName => {
-      console.log('actionName: ',actionName)
+      console.log('actionName: ', actionName)
       if (typeof actions[actionName].context === 'undefined' || typeof actions[actionName].context !== 'object') {
         return false
       }
@@ -190,10 +187,10 @@ export class Game extends EventEmitter {
   static baseState = () => {
     return {
       clients: [],
-  
+
       // Has the game started?
       started: false,
-  
+
       // Clients that are actually playing the game plus some turn order variables
       players: {
         list: [],
@@ -202,10 +199,25 @@ export class Game extends EventEmitter {
         currentPlayer: null,
         currentPlayerPhase: 0,
       },
-  
+
       // Table
       table: null,
     }
   }
 
 }
+
+/* eslint-disable no-extend-native */
+Object.defineProperties(Array.prototype, {
+  'first': {
+    get: function () {
+      return this[0]
+    }
+  },
+  'last': {
+    get: function () {
+      return this[this.length - 1]
+    }
+  }
+})
+/* eslint-enable no-extend-native */

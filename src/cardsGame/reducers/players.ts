@@ -67,4 +67,4 @@ const playersReducer = {
   }
 }
 
-module.exports = playersReducer
+export default playersReducer

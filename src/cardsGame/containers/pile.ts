@@ -1,7 +1,7 @@
-import Container from '../container'
+import { Container, IContainerOptions } from '../container'
 import utils from '../../../shared/utils'
 
-const cardsDataFactory = (card, limits) => {
+const cardsDataFactory = (card, limits): CardsData => {
   return {
     id: card.id,
     rotation: utils.float(limits.minAngle, limits.maxAngle),
@@ -12,6 +12,25 @@ const cardsDataFactory = (card, limits) => {
   }
 }
 
+interface CardsData {
+  id: number
+  rotation: number
+  offset: object
+}
+
+interface PileVisualLimits {
+  minAngle: number
+  maxAngle: number
+  minX: number
+  minY: number
+  maxX: number
+  maxY: number
+}
+
+export interface IPileOptions extends IContainerOptions {
+  limits?: PileVisualLimits
+}
+
 /**
  * Cards in Pile have tendency to fall at random angle and not exactly in
  * the center of the container.
@@ -19,13 +38,15 @@ const cardsDataFactory = (card, limits) => {
  * and rotation when it lands in container
  */
 
-class Pile extends Container {
+export class Pile extends Container {
 
-  constructor(options = {}) {
-    super({
-      ...options,
-      type: options.type || 'pile',
-    })
+  limits: PileVisualLimits
+  cardsData: Array<CardsData>
+
+  constructor(options: IPileOptions) {
+    super(options)
+
+    this.type = options.type || 'pile'
 
     this.limits = Object.assign({}, {
       minAngle: -20,
@@ -40,19 +61,18 @@ class Pile extends Container {
   }
 
   // FIXME: listen for self addChild events?
-  push(element) {
+  addChild(element) {
     this.cardsData.push(cardsDataFactory(element, this.limits))
-    return super.push(element)
+    return super.addChild(element)
   }
 
   // FIXME: listen for self removeChild events? plz
-  remove(element) {
-    const idx = this.elements.indexOf(element)
-    return this.elements.splice(idx, 1)
+  removeChild(element) {
+    const idx = this.children.indexOf(element)
+    this.cardsData.splice(idx, 1)
+    return super.removeChild(element)
   }
 
   // TODO: Store data about each card's rotation
 
 }
-
-module.exports = Pile

@@ -1,9 +1,9 @@
-import Command from './commands/command'
+import { Command } from './command'
 
 export default class CommandManager {
 
   commands: Array<Command>
-  lastCommand: Command|null
+  lastCommand: Command | null
 
   constructor() {
     this.commands = []

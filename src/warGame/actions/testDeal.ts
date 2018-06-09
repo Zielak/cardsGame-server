@@ -1,7 +1,4 @@
-const {
-  Command,
-  Deck,
-} = require('../../cardsGame/index')
+import { Command, Deck } from '../../cardsGame/index'
 
 const command = class TestDealCommand extends Command {
 

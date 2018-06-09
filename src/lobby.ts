@@ -1,4 +1,4 @@
-import colyseus from 'colyseus'
+import * as colyseus from 'colyseus'
 
 const isValidMessage = text => {
   return ('' + text).length > 0

@@ -6,30 +6,32 @@ import { nosync } from 'colyseus'
 const objects = new Map()
 
 export interface IBaseOptions {
-  type?:string
-  name?:string
-  width?:number
-  height?:number
-  onUpdate?:Function
-  parentId?:string
+  type?: string
+  name?: string
+  width?: number
+  height?: number
+  x?: number
+  y?: number
+  onUpdate?: Function
+  parentId?: string
 }
 
-export class Base extends EventEmitter {
+export abstract class Base extends EventEmitter {
 
-  id:string
-  type:string
-  name:string
-  parentId:string|null
+  id: string
+  type: string | undefined
+  name: string | undefined
+  parentId: string | null
 
-  width:number
-  height:number
+  width: number
+  height: number
 
-  children:Array<string>
+  children: Array<string>
 
-  onUpdate:Function
+  onUpdate: Function
 
 
-  constructor(options:IBaseOptions) {
+  constructor(options: IBaseOptions) {
     super()
     this.id = uuid()
 
@@ -191,7 +193,7 @@ export class Base extends EventEmitter {
    * @memberof Base
    */
   getAllByType(type, deep = true) {
-    const nested:Array<object> = []
+    const nested: Array<object> = []
     const found = this.children
       .map(Base.toObject)
       .filter(el => {

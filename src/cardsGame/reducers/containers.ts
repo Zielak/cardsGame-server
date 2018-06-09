@@ -22,4 +22,4 @@ const containersReducer = {
   }
 }
 
-module.exports = containersReducer
+export default containersReducer

@@ -7,4 +7,4 @@ const clientsReducer = {
   }
 }
 
-module.exports = clientsReducer
+export default clientsReducer

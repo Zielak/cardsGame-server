@@ -15,4 +15,4 @@ const createArrayReducer = (targetArray) => {
   return reducer
 }
 
-module.exports = createArrayReducer
+export default createArrayReducer

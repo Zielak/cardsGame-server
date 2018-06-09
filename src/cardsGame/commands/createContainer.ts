@@ -1,6 +1,6 @@
 // TODO: whats that even?
 
-import Command from './command'
+import { Command } from '../command'
 const containerClasses = {
   'container': require('../container'),
   'deck': require('../containers/deck'),
@@ -10,7 +10,7 @@ const containerClasses = {
   'spread': require('../containers/spread'),
 }
 
-class CreateContainer extends Command {
+export default class CreateContainer extends Command {
 
   /**
    * Creates an instance of CreateContainer.
@@ -23,13 +23,13 @@ class CreateContainer extends Command {
    *
    * @memberof CreateContainer
    */
-  constructor(invoker, conditions, context) {
+  constructor(conditions, context) {
     super(context)
   }
 
   execute() {
-    this.context.newContainer = new containerClasses[this._type](this._options)
-    this.context.state.containers.push(this._newContainer)
+    this.context.newContainer = new containerClasses[this.context.type](this.context.options)
+    this.context.state.containers.push(this.context.newContainer)
   }
 
   undo() {
@@ -39,5 +39,3 @@ class CreateContainer extends Command {
     // TODO: undo plz
   }
 }
-
-module.exports = CreateContainer

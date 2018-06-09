@@ -1,14 +1,10 @@
-import Container from '../container'
+import { Container, IContainerOptions } from '../container'
 
-class Spread extends Container {
+export class Spread extends Container {
 
-  constructor(options = {}) {
-    super({
-      ...options,
-      type: options.type || 'spread',
-    })
+  constructor(options: IContainerOptions) {
+    super(options)
+    this.type = options.type || 'spread'
   }
 
 }
-
-module.exports = Spread

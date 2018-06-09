@@ -1,17 +1,17 @@
-import colyseus from 'colyseus'
-const {
-  Game, Reducers
-} = require('../cardsGame/index')
+import * as colyseus from 'colyseus'
+import { Game, Reducers } from '../cardsGame/index'
 
 import actions from './actions/index'
 const reducer = {
   clients: Reducers.createArrayReducer('clients'),
   cards: Reducers.createArrayReducer('cards'),
   containers: Reducers.createArrayReducer('containers'),
-  players: Reducers.players,
+  players: Reducers.playerReducer,
 }
 
-class WarGame extends colyseus.Room {
+export default class WarGame extends colyseus.Room {
+
+  game: Game
 
   onInit(options) {
     this.game = new Game({
@@ -100,5 +100,3 @@ class WarGame extends colyseus.Room {
   }
 
 }
-
-module.exports = WarGame

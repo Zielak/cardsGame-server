@@ -1,5 +1,9 @@
+export class PlayerEvent {
+  player
+  reporter
+  element
+  eventType
 
-class PlayerEvent {
   constructor({ player, reporter, element, eventType }) {
     this.player = player
     this.reporter = reporter
@@ -7,5 +11,3 @@ class PlayerEvent {
     this.eventType = eventType
   }
 }
-
-module.exports = PlayerEvent

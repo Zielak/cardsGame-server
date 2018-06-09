@@ -1,9 +1,8 @@
-import Command from './command'
-const {
-  Deck, Player
-} = require('../index')
+import { Command } from '../command'
+import { Deck } from '../containers/deck'
+import { Player } from '../player'
 
-class DrawUpToXCommand extends Command {
+export default class DrawUpToX extends Command {
 
   execute(invoker, state, reducer) {
     return new Promise((resolve) => {
@@ -23,5 +22,3 @@ class DrawUpToXCommand extends Command {
   }
 
 }
-
-module.exports = DrawUpToXCommand

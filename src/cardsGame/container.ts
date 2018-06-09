@@ -2,7 +2,7 @@ import Conditions from './conditions'
 import { Base, IBaseOptions } from './base'
 
 export interface IContainerOptions extends IBaseOptions {
-  conditions: Conditions
+  conditions?: Array<Function>
 }
 
 export class Container extends Base {

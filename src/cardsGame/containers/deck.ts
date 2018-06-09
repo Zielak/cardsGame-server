@@ -1,16 +1,16 @@
-import Container from '../container'
+import { Container, IContainerOptions } from '../container'
 
 /**
  * Neatly stacked cards on top of eachother. Only the top card is visible.
  * Deck respects card's `faceUp` state,
  * and will show the face or back of visible card
  */
-class Deck extends Container {
+export class Deck extends Container {
 
-  constructor(options = {}) {
+  constructor(options: IContainerOptions) {
     super({
       ...options,
-      type: options.type || 'deck',
+      type: options.type || 'deck'
     })
   }
 
@@ -31,7 +31,7 @@ class Deck extends Container {
     const dealOne = () => {
       const card = this.top()
       if (!card) {
-        this.onCardsDealt(containers)
+        this.onCardsDealt()
         return
       }
       card.moveTo(containers[i % containers.length])
@@ -39,7 +39,7 @@ class Deck extends Container {
       if (this.children.length > 0 && i < maxDeals) {
         setTimeout(dealOne, 10)
       } else {
-        this.onCardsDealt(containers)
+        this.onCardsDealt()
       }
     }
     dealOne()
@@ -52,11 +52,9 @@ class Deck extends Container {
     console.log('Deck: Done dealing cards.')
   }
 
-}
+  static events = {
+    ...Container.events,
+    DEALT: 'dealt'
+  }
 
-Deck.events = {
-  ...Container.events,
-  DEALT: 'dealt'
 }
-
-module.exports = Deck

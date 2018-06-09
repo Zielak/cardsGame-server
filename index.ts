@@ -12,7 +12,7 @@ const rooms = {
   // lobby: require('./app/lobby')
 }
 
-const port = process.env.PORT || 2657
+const port = +process.env.PORT || 2657
 const app = express()
 
 // Create HTTP Server
@@ -26,8 +26,8 @@ const gameServer = new colyseus.Server({ server: httpServer })
 gameServer.register('warGame', rooms.warGame)
 
 app.use(express.static(path.join(__dirname, 'static')))
-app.use('/', serveIndex(path.join(__dirname, 'static'), {'icons': true}))
+app.use('/', serveIndex(path.join(__dirname, 'static'), { 'icons': true }))
 
 gameServer.listen(port)
 
-console.log(`Listening on http://localhost:${ port }`)
+console.log(`Listening on http://localhost:${port}`)

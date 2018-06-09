@@ -1,40 +1,39 @@
+export { Base } from './base'
+export { BaseCard } from './baseCard'
+export { ClassicCard } from './classicCard'
+export { Command } from './command'
 
-/* eslint-disable no-extend-native */
-Object.defineProperties(Array.prototype, {
-  'first': {
-    get: function () {
-      return this[0]
-    }
-  },
-  'last': {
-    get: function () {
-      return this[this.length - 1]
-    }
-  }
-})
-/* eslint-enable no-extend-native */
-
-import { Game } from './game'
-import { Base } from './base'
-import { BaseCard } from './baseCard'
-import { ClassicCard } from './classicCard'
-import { Container } from './container'
-import Command from './commands/command'
-import Conditions from './conditions/index'
-import Reducers from './reducers/index'
-import { Deck } from './containers/deck'
-import { Hand } from './containers/hand'
-import { Pile } from './containers/pile'
-import { Row } from './containers/row'
-import { Spread } from './containers/spread'
-import { Player } from './player'
-import { Presets } from './presets'
-import { Table } from './table'
-
-export default {
-  Game,
-  Base, BaseCard, ClassicCard, Container,
-  Command, Conditions, Reducers,
-  Deck, Hand, Pile, Row, Spread,
-  Player, Presets, Table,
+import CreateContainer from './commands/createContainer'
+import DrawUpToXCommand from './commands/drawUpToX'
+import MoveCardToContainer from './commands/moveCardToContainer'
+import NextPlayer from './commands/nextPlayer'
+import PreviousPlayer from './commands/prevPlayer'
+export const DefaultCommands = {
+  CreateContainer,
+  DrawUpToXCommand,
+  MoveCardToContainer,
+  NextPlayer,
+  PreviousPlayer
 }
+
+import isClientPlaying from './conditions/isClientPlaying'
+import isPlayersTurn from './conditions/isPlayersTurn'
+export const Conditions = {
+  isClientPlaying, isPlayersTurn
+}
+
+export { Container } from './container'
+export { Deck } from './containers/deck'
+export { Hand } from './containers/hand'
+export { Pile } from './containers/pile'
+export { Row } from './containers/row'
+export { Spread } from './containers/spread'
+
+export { Game } from './game'
+export { Player } from './player'
+import * as Presets from './presets'
+export { Presets }
+export { Table } from './table'
+
+// import * as Reducers
+export { Reducers } from './reducers/index'

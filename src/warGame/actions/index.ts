@@ -1,11 +1,11 @@
-import defaultCommands from '../../cardsGame/commands/index'
+import { DefaultCommands } from '../../cardsGame'
 
 export default {
   GameStart: require('./gameStart'),
 
   PlayCard: require('./playCard'),
-  NextPlayer: defaultCommands.NextPlayer,
-  PrevPlayer: defaultCommands.PrevPlayer,
+  NextPlayer: DefaultCommands.NextPlayer,
+  PrevPlayer: DefaultCommands.PreviousPlayer,
 
   DrawUpToThree: require('./drawUpToThree'),
 

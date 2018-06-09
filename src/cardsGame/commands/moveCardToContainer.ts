@@ -1,8 +1,8 @@
-import Command from './command'
+import { Command } from '../command'
 // import Container from '../container'
 import utils from '../../../shared/utils'
 
-class MoveCardToContainerCommand extends Command {
+export default class MoveCardToContainer extends Command {
 
   /**
    * Creates an instance of MoveCardToContainerCommand.
@@ -29,5 +29,3 @@ class MoveCardToContainerCommand extends Command {
   }
 
 }
-
-module.exports = MoveCardToContainerCommand

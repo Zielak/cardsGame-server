@@ -1,6 +1,4 @@
-const {
-  isPlayersTurn,
-} = require('../../cardsGame').Conditions
+import { Conditions } from '../../cardsGame'
 const {
   Command,
 } = require('../../cardsGame/index')
@@ -16,7 +14,7 @@ const context = {
 }
 
 const condition = (state, client) => new Promise((resolve, reject) => {
-  if (!isPlayersTurn(state, client.id)) {
+  if (!Conditions.isPlayersTurn(state, client.id)) {
     reject(`It's not your turn.`)
     return
   }
