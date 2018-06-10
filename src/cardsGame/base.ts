@@ -1,5 +1,5 @@
 import uuid from 'uuid/v4'
-import utils from '../../shared/utils'
+import { def, noop } from './utils'
 import { EventEmitter } from 'eventemitter3'
 import { nosync } from 'colyseus'
 
@@ -38,23 +38,23 @@ export abstract class Base extends EventEmitter {
     // Store a reference to itself by ID
     objects.set(this.id, this)
 
-    this.type = utils.def(options.type, undefined)
-    this.name = utils.def(options.name, undefined)
+    this.type = def(options.type, undefined)
+    this.name = def(options.name, undefined)
 
     // DEPRECATE: unused in client code.
     // Real-life size (in CM) and position
     // this._local = {
-    //   x: utils.def(options.x, 0),
-    //   y: utils.def(options.y, 0),
-    //   angle: utils.def(options.angle, 0),
+    //   x: def(options.x, 0),
+    //   y: def(options.y, 0),
+    //   angle: def(options.angle, 0),
     // }
-    this.width = utils.def(options.width, 5)
-    this.height = utils.def(options.height, 5)
+    this.width = def(options.width, 5)
+    this.height = def(options.height, 5)
 
     // List of children ID's
     this.children = []
 
-    this.onUpdate = utils.def(options.onUpdate || utils.noop)
+    this.onUpdate = def(options.onUpdate, noop)
 
     // ParentID, no object reference
     // console.info('typeof options.parentId === '+typeof options.parentId)

@@ -1,6 +1,7 @@
 {
-  "presets":[
-    "env"
+  "presets": [
+    "env",
+    "typescript"
   ],
   "plugins": [
     "transform-object-rest-spread"
@@ -8,16 +9,25 @@
   "env": {
     "test": {
       "plugins": [
-        ["provide-modules", {
-          "test/_helpers": ["window"]
-        }],
-        ["module-resolver", {
-          "root": ["./"],
-          "alias": {
-            "test/_helpers": "./test/_helpers",
-            "pixi.js": "./test/_pixi"
+        [
+          "provide-modules",
+          {
+            "test/_helpers": [
+              "window"
+            ]
           }
-        }]
+        ],
+        [
+          "module-resolver",
+          {
+            "root": [
+              "./"
+            ],
+            "alias": {
+              "test/_helpers": "./test/_helpers"
+            }
+          }
+        ]
       ]
     }
   }

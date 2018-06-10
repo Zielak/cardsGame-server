@@ -1,4 +1,4 @@
-import utils from '../../shared/utils'
+import { def } from './utils'
 
 /**
  * Table is where all the containers and cards are laid out.
@@ -16,8 +16,8 @@ export class Table {
   y
 
   constructor({ width, height }) {
-    this.width = utils.def(width, 55)
-    this.height = utils.def(height, 55)
+    this.width = def(width, 55)
+    this.height = def(height, 55)
     this.x = 0
     this.y = 0
   }

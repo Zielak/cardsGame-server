@@ -1,13 +1,13 @@
 import { Container, IContainerOptions } from '../container'
-import utils from '../../../shared/utils'
+import { float } from '../utils'
 
 const cardsDataFactory = (card, limits): CardsData => {
   return {
     id: card.id,
-    rotation: utils.float(limits.minAngle, limits.maxAngle),
+    rotation: float(limits.minAngle, limits.maxAngle),
     offset: {
-      x: utils.float(limits.minX, limits.maxX),
-      y: utils.float(limits.minY, limits.maxY),
+      x: float(limits.minX, limits.maxX),
+      y: float(limits.minY, limits.maxY),
     }
   }
 }

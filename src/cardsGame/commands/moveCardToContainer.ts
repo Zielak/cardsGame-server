@@ -1,6 +1,6 @@
 import { Command } from '../command'
 // import Container from '../container'
-import utils from '../../../shared/utils'
+import { getElementById } from '../utils'
 
 export default class MoveCardToContainer extends Command {
 
@@ -24,7 +24,7 @@ export default class MoveCardToContainer extends Command {
   }
 
   execute(invoker, state/*, reducer*/) {
-    const card = utils.getElementById(state.cards, this.context.card.id)
+    const card = getElementById(state.cards, this.context.card.id)
     this.context.container.addChild(card)
   }
 
