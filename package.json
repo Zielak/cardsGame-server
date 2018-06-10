@@ -5,8 +5,7 @@
   "main": "lib/index",
   "types": "lib/index",
   "scripts": {
-    "start": "nodemon --watch '**/*.ts' --exec ts-node src/index.ts",
-    "build": "ts-node src/index.ts",
+    "start": "ts-node src/index.ts",
     "precommit": "npm test && npm run lint",
     "lint": "eslint ./ -f visualstudio",
     "test": "ts-node src/index.ts && ava",
@@ -53,14 +52,5 @@
     ],
     "sourceMap": true,
     "report-dir": "./dist/coverage"
-  },
-  "nodemonConfig": {
-    "env": {
-      "NODE_ENV": "development"
-    },
-    "ext": "ts",
-    "watch": [
-      "src/"
-    ]
   }
 }

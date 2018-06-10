@@ -4,11 +4,13 @@ import serveIndex from 'serve-index'
 import * as http from 'http'
 import * as colyseus from 'colyseus'
 
+import WarGame from './warGame/index'
+
 require('./consoleColors')
 
 // Require ChatRoom handler
 const rooms = {
-    warGame: require('./warGame/index')
+    WarGame
     // lobby: require('./lobby')
 }
 
@@ -23,7 +25,7 @@ const gameServer = new colyseus.Server({ server: httpServer })
 
 // Register Lobby as 'lobby'
 // gameServer.register('lobby', Lobby)
-gameServer.register('warGame', rooms.warGame)
+gameServer.register('warGame', rooms.WarGame)
 
 app.use(express.static(path.join(__dirname, 'static')))
 app.use('/', serveIndex(path.join(__dirname, 'static'), { 'icons': true }))
