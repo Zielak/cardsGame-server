@@ -1,18 +1,18 @@
-import path from 'path'
+import * as path from 'path'
 import express from 'express'
 import serveIndex from 'serve-index'
-import http from 'http'
-import colyseus from 'colyseus'
+import * as http from 'http'
+import * as colyseus from 'colyseus'
 
 require('./consoleColors')
 
 // Require ChatRoom handler
 const rooms = {
-  warGame: require('./app/warGame/index')
-  // lobby: require('./app/lobby')
+    warGame: require('./warGame/index')
+    // lobby: require('./lobby')
 }
 
-const port = +process.env.PORT || 2657
+const port = parseInt('' + process.env.PORT) || 2657
 const app = express()
 
 // Create HTTP Server

@@ -1,4 +1,4 @@
-import * as EventEmitter from 'eventemitter3'
+import { EventEmitter } from 'eventemitter3'
 import CommandManager from './commandManager'
 import { toArray } from './utils'
 

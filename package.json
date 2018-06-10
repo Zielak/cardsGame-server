@@ -2,7 +2,8 @@
   "name": "multiplayer-game",
   "version": "0.1.0",
   "description": "Server side of multiplayer cards game",
-  "main": "index.js",
+  "main": "lib/index",
+  "types": "lib/index",
   "scripts": {
     "start": "tsc && node lib/index.js",
     "dev": "nodemon",

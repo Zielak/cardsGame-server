@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
-    "strictNullChecks": true,
-    "module": "amd",
-    "removeComments": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "lib",
+    // "outFile": ".lib/index.js",
     "preserveConstEnums": true,
-    "outFile": ".lib/index.js",
+    "removeComments": true,
     "sourceMap": true,
+    "strictNullChecks": true,
     "target": "esnext"
   },
   "include": [

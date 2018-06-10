@@ -1,6 +1,6 @@
 import uuid from 'uuid/v4'
 import utils from '../../shared/utils'
-import * as EventEmitter from 'eventemitter3'
+import { EventEmitter } from 'eventemitter3'
 import { nosync } from 'colyseus'
 
 const objects = new Map()
