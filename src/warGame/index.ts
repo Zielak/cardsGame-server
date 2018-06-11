@@ -3,7 +3,7 @@ import { Game, Reducers } from '../cardsGame/index'
 
 import actions from './actions/index'
 const reducer = {
-  clients: Reducers.createArrayReducer('clients'),
+  clients: Reducers.clientsReducer,
   cards: Reducers.createArrayReducer('cards'),
   containers: Reducers.createArrayReducer('containers'),
   players: Reducers.playerReducer,
@@ -65,10 +65,10 @@ export default class WarGame extends colyseus.Room {
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param {object} client or undefined, if action is needed to perform by "game" itself
-   * @param {object} data 
+   * @param {object} data
    * @memberof WarGame
    */
   performAction(client, data) {

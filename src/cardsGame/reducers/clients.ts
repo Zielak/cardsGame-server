@@ -4,6 +4,10 @@ const clientsReducer = {
   },
   remove: (state, client) => {
     state.clients = state.clients.filter(el => el !== client)
+  },
+  update: (state, client) => {
+    const idx = state.clients.indexOf(client)
+    state.clients[idx] = client
   }
 }
 

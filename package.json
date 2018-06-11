@@ -6,7 +6,7 @@
   "types": "lib/index",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "precommit": "npm test && npm run lint",
+    "precommit": "npm run lint",
     "lint": "eslint ./ -f visualstudio",
     "test": "ts-node src/index.ts && ava",
     "test:cover": "ts-node src/index.ts && nyc ava",
