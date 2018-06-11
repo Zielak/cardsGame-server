@@ -33,5 +33,3 @@ export class Hand extends Container {
   }
 
 }
-
-module.exports = Hand

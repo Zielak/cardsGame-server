@@ -25,5 +25,3 @@ export class Player extends Base {
   }
 
 }
-
-module.exports = Player
