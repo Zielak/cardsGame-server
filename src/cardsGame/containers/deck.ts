@@ -1,4 +1,5 @@
 import { Container, IContainerOptions } from '../container'
+import { BaseCard } from '../baseCard'
 
 /**
  * Neatly stacked cards on top of eachother. Only the top card is visible.
@@ -29,7 +30,7 @@ export class Deck extends Container {
     const maxDeals = count * containers.length
 
     const dealOne = () => {
-      const card = this.top()
+      const card: BaseCard = this.top()
       if (!card) {
         this.onCardsDealt()
         return
@@ -37,7 +38,7 @@ export class Deck extends Container {
       card.moveTo(containers[i % containers.length])
       i++
       if (this.children.length > 0 && i < maxDeals) {
-        setTimeout(dealOne, 10)
+        setTimeout(dealOne, 1000)
       } else {
         this.onCardsDealt()
       }

@@ -114,15 +114,18 @@ export abstract class Base extends EventEmitter {
    * addChild method ensures that both new and old parents are
    * updated with the change.
    *
-   * @param {any|string} newParent
+   * @param {Base|string} newParent
    * @returns this
    * @memberof Base
    */
-  moveTo(newParent) {
+  moveTo(newParent: Base | string) {
+    let targetElement: Base
     if (typeof newParent === 'string') {
-      newParent = Base.get(newParent)
+      targetElement = Base.get(newParent)
+    } else {
+      targetElement = newParent
     }
-    newParent.addChild(this)
+    targetElement.addChild(this)
     return this
   }
 
@@ -135,7 +138,7 @@ export abstract class Base extends EventEmitter {
    * @memberof Base
    */
   addChild(element) {
-    const child = typeof element === 'string' ? Base.get(element) : element
+    const child: Base = typeof element === 'string' ? Base.get(element) : element
 
     // Notify element's last parent of change
     const lastParent = Base.get(child.parentId)
