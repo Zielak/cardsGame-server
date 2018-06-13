@@ -4,14 +4,35 @@ import serveIndex from 'serve-index'
 import * as http from 'http'
 import * as colyseus from 'colyseus'
 
+// /* eslint-disable no-extend-native */
+// interface Array<T> {
+//   first: T
+//   last: T
+// }
+
+// Object.defineProperties(Array.prototype, {
+//   'first': {
+//     get: function () {
+//       return this[0]
+//     }
+//   },
+//   'last': {
+//     get: function () {
+//       return this[this.length - 1]
+//     }
+//   }
+// })
+// /* eslint-enable no-extend-native */
+
+
 import WarGame from './warGame/index'
 
 require('./consoleColors')
 
 // Require ChatRoom handler
 const rooms = {
-    WarGame
-    // lobby: require('./lobby')
+  WarGame
+  // lobby: require('./lobby')
 }
 
 const port = parseInt('' + process.env.PORT) || 2657

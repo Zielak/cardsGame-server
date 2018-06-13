@@ -1,32 +1,18 @@
 import * as colyseus from 'colyseus'
-import { Game, Reducers } from '../cardsGame/index'
+import { Game, GameState } from '../cardsGame/index'
 
 import actions from './actions/index'
-const reducer = {
-  clients: Reducers.clientsReducer,
-  cards: Reducers.createArrayReducer('cards'),
-  containers: Reducers.createArrayReducer('containers'),
-  players: Reducers.playerReducer,
-}
 
-export default class WarGame extends colyseus.Room {
+export default class WarGame extends colyseus.Room<GameState> {
 
   game: Game
 
   onInit(options) {
-    this.game = new Game({
-      actions,
-      reducer,
-    })
+    this.game = new Game({ actions })
 
-    this.setState(Object.assign({}, Game.baseState(), {
+    this.setState(new GameState({
       maxClients: options.maxClients || 2,
       host: options.host,
-
-      // Initial array of all available cards in the game
-      cards: [],
-      // Containers holding (or not yet) cards
-      containers: [],
     }))
 
     console.log('WarGame room created!', options)
@@ -42,14 +28,14 @@ export default class WarGame extends colyseus.Room {
 
   onJoin(client) {
     console.log('WarGame: JOINED: ', client.id)
-    reducer.clients.add(this.state, client.id)
+    this.state.clients.add(client.id)
     if (!this.state.host) {
       this.state.host = client.id
     }
   }
 
   onLeave(client) {
-    reducer.clients.remove(this.state, client.id)
+    this.state.clients.remove(client.id)
     // TODO: Handle leave when the game is running
     // Timeout => end game? Make player able to go back in?
   }

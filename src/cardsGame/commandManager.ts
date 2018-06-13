@@ -11,18 +11,17 @@ export default class CommandManager {
   }
 
   /**
-   * 
-   * @param {Command} command 
-   * @param {*} invoker 
-   * @param {*} state 
-   * @param {*} reducer 
+   *
+   * @param {Command} command
+   * @param {*} invoker
+   * @param {*} state
    */
-  execute(command, context, invoker, state, reducer) {
+  execute(command, context, invoker, state) {
     const newCommand = new command(context)
     this.commands.push(newCommand)
     this.lastCommand = newCommand
     newCommand.prepare()
-    return newCommand.execute(invoker, state, reducer)
+    return newCommand.execute(invoker, state)
   }
 
   get canUndo() {

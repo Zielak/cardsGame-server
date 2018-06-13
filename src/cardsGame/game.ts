@@ -1,6 +1,9 @@
 import { EventEmitter } from 'eventemitter3'
 import CommandManager from './commandManager'
 import { toArray } from './utils'
+import { GameState } from './state';
+
+// TODO: Merge it all with the game Room?
 
 const eventTypeMatches = (playerEvent, actionContext) => {
   // does eventType match?
@@ -51,20 +54,17 @@ const doesContextMatch = (playerEvent, actionContext) => {
 
 export interface IGameOptions {
   actions
-  reducer
 }
 
 export class Game extends EventEmitter {
 
   actions
-  reducer
   commandManager
 
   constructor(options: IGameOptions) {
     super()
 
     this.actions = options.actions
-    this.reducer = options.reducer
 
     this.commandManager = new CommandManager()
   }
@@ -87,14 +87,13 @@ export class Game extends EventEmitter {
 
   /**
    * Check conditions and perform given action
-   * 
+   *
    * @param {object} client object, with id and stuff. Otherwise will act as the "game" itself issues this command
-   * @param {string} actionName 
-   * @param {object} state 
+   * @param {string} actionName
+   * @param {object} state
    * @returns {Promise}
-   * @memberof Game
    */
-  performAction(client, data, state) {
+  performAction(client, data, state: GameState) {
     if (client === null || typeof client !== 'object') {
       client = Game.id
     }
@@ -134,7 +133,7 @@ export class Game extends EventEmitter {
       if (action.condition === undefined) {
         console.info(`action has no conditions`)
         this.commandManager.execute(
-          action.command, context, client, state, this.reducer
+          action.command, context, client, state
         )
           .then(this.actionCompleted(resolve, actionName))
           .catch(this.actionFailed(reject, actionName))
@@ -142,7 +141,7 @@ export class Game extends EventEmitter {
         // Run conditions if it's possible to do it now
         action.condition(state, client)
           .then(() => this.commandManager.execute(
-            action.command, context, client, state, this.reducer
+            action.command, context, client, state
           ))
           .then(this.actionCompleted(resolve, actionName))
           .catch(this.actionFailed(reject, actionName))
@@ -158,11 +157,6 @@ export class Game extends EventEmitter {
 
   }
 
-  /**
-   * 
-   * 
-   * @memberof Game
-   */
   mapEventToIntention(playerEvent) {
     const actions = this.actions
     const actionKeys = Object.keys(actions)
@@ -184,40 +178,4 @@ export class Game extends EventEmitter {
     ACTION_FAILED: 'actionFailed',
   }
 
-  static baseState = () => {
-    return {
-      clients: [],
-
-      // Has the game started?
-      started: false,
-
-      // Clients that are actually playing the game plus some turn order variables
-      players: {
-        list: [],
-        reversed: false,
-        currentPlayerIdx: 0,
-        currentPlayer: null,
-        currentPlayerPhase: 0,
-      },
-
-      // Table
-      table: null,
-    }
-  }
-
 }
-
-/* eslint-disable no-extend-native */
-Object.defineProperties(Array.prototype, {
-  'first': {
-    get: function () {
-      return this[0]
-    }
-  },
-  'last': {
-    get: function () {
-      return this[this.length - 1]
-    }
-  }
-})
-/* eslint-enable no-extend-native */

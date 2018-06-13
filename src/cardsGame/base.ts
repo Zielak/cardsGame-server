@@ -195,8 +195,8 @@ export abstract class Base extends EventEmitter {
    * @returns {Array<object>} list of found elements
    * @memberof Base
    */
-  getAllByType(type, deep = true) {
-    const nested: Array<object> = []
+  getAllByType<T>(type: string, deep = true) {
+    const nested: Array<T> = []
     const found = this.children
       .map(Base.toObject)
       .filter(el => {
@@ -205,21 +205,23 @@ export abstract class Base extends EventEmitter {
         }
         return el.type === type
       })
-    return [...found, ...nested]
+    const retArray = [...found, ...nested]
+    return retArray
   }
 
   /**
    * Get only one child of a certain type
    * Order or lookup is not defined
    * (you should be certain that there's only one element of that type)
-   *
-   * @param {string} type
-   * @returns {pbject}
-   * @memberof Base
    */
-  getByType(type) {
-    return this.getAllByType(type, false)[0]
+  getByType<T>(type: string): T {
+    const ret = this.getAllByType<T>(type, false)[0]
+    return ret
   }
+
+  // getByClass<T>(cls: T): T {
+  //   return
+  // }
 
   /**
    * Get a reference to the object by its ID

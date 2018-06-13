@@ -38,7 +38,7 @@ export class Deck extends Container {
       card.moveTo(containers[i % containers.length])
       i++
       if (this.children.length > 0 && i < maxDeals) {
-        setTimeout(dealOne, 1000)
+        setTimeout(dealOne, 50)
       } else {
         this.onCardsDealt()
       }

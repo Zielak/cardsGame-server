@@ -33,10 +33,8 @@ export { Row } from './containers/row'
 export { Spread } from './containers/spread'
 
 export { Game } from './game'
+export { GameState } from './state'
 export { Player } from './player'
 import * as Presets from './presets'
 export { Presets }
 export { Table } from './table'
-
-// import * as Reducers
-export { Reducers } from './reducers/index'
