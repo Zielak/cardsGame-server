@@ -1,9 +1,13 @@
+
+import { Player } from './player'
+
+export interface IContext {
+  initiator?: Player
+}
+
 export class Command {
 
-  context
-
-  constructor(context = {}) {
-    this.context = context
+  constructor(public context: IContext) {
   }
 
   prepare() { }

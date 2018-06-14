@@ -1,6 +1,6 @@
 // TODO: whats that even?
 
-import { Command } from '../command'
+import { Command, IContext } from '../command'
 const containerClasses = {
   'container': require('../container'),
   'deck': require('../containers/deck'),
@@ -8,6 +8,10 @@ const containerClasses = {
   'pile': require('../containers/pile'),
   'row': require('../containers/row'),
   'spread': require('../containers/spread'),
+}
+
+interface ICreateContainerContext extends IContext {
+
 }
 
 export default class CreateContainer extends Command {
