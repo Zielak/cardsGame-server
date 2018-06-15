@@ -2,13 +2,10 @@
 import { Player } from './player'
 
 export interface IContext {
-  initiator?: Player
+  invoker?: Player
 }
 
 export class Command {
-
-  constructor(public context: IContext) {
-  }
 
   prepare() { }
 
