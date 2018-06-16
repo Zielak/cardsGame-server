@@ -1,65 +1,19 @@
 import { EventEmitter } from 'eventemitter3'
 import CommandManager from './commandManager'
-import { toArray } from './utils'
-import { GameState } from './state';
-
-// TODO: Merge it all with the game Room?
-
-const eventTypeMatches = (playerEvent, actionContext) => {
-  // does eventType match?
-  if (actionContext.eventType) {
-    const eventTypes = toArray(actionContext.eventType)
-    return eventTypes.some(type =>
-      type === playerEvent.eventType
-    )
-  }
-  // Action context doesn't care about eventType
-  return true
-}
-
-const reporterMatches = (playerEvent, actionContext) => {
-  // does reporter props match?
-  if (actionContext.reporter) {
-    // There can only be one reporter!
-    // All provided props MUST match
-    const keys = Object.keys(actionContext.reporter)
-    return keys.every(prop =>
-      actionContext.reporter[prop] === playerEvent.reporter[prop]
-    )
-  }
-  // Action context doesn't care about reporter
-  return true
-}
-
-const elementMatches = (playerEvent, actionContext) => {
-  if (actionContext.element) {
-    // Many elements might get selected
-    const playerElements = toArray(playerEvent.element)
-    const contextProps = Object.keys(actionContext.element)
-    // Every required element MUST have the same props as described in context
-    return playerElements.every(element =>
-      contextProps.every(prop =>
-        element[prop] === actionContext.element[prop]
-      )
-    )
-  }
-  return true
-}
-
-const doesContextMatch = (playerEvent, actionContext) => {
-  return eventTypeMatches(playerEvent, actionContext) &&
-    reporterMatches(playerEvent, actionContext) &&
-    elementMatches(playerEvent, actionContext)
-}
+import { GameState } from './state'
+import { Command } from './command'
+import { EventParser } from './eventParser'
+import { PlayerEvent } from './events/playerEvent';
 
 export interface IGameOptions {
-  actions
+  actions: Command[]
 }
 
 export class Game extends EventEmitter {
 
-  actions
-  commandManager
+  actions: Command[]
+  commandManager: CommandManager
+  eventParser: EventParser
 
   constructor(options: IGameOptions) {
     super()
@@ -67,6 +21,7 @@ export class Game extends EventEmitter {
     this.actions = options.actions
 
     this.commandManager = new CommandManager()
+    this.eventParser = new EventParser(this.actions)
   }
 
   actionCompleted(resolve, actionName) {
@@ -93,15 +48,12 @@ export class Game extends EventEmitter {
    * @param {object} state
    * @returns {Promise}
    */
-  performAction(client, data, state: GameState) {
+  performAction(client, data: PlayerEvent, state: GameState) {
     if (client === null || typeof client !== 'object') {
       client = Game.id
     }
 
-    // Get action object, if its simple action or user interaction?
-    const action = data.action ?
-      this.actions[data.action] :
-      this.mapEventToIntention(data)
+    const action = this.eventParser.getAction(data)
 
     const actionName = data.action // TODO: OR????
 
@@ -157,19 +109,7 @@ export class Game extends EventEmitter {
 
   }
 
-  mapEventToIntention(playerEvent) {
-    const actions = this.actions
-    const actionKeys = Object.keys(actions)
 
-    const matchedContext = actionKeys.filter(actionName => {
-      console.log('actionName: ', actionName)
-      if (typeof actions[actionName].context === 'undefined' || typeof actions[actionName].context !== 'object') {
-        return false
-      }
-      return doesContextMatch(playerEvent, actions[actionName].context)
-    })
-    return matchedContext
-  }
 
   static id = Symbol('gameid')
 

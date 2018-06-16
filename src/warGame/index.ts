@@ -1,5 +1,5 @@
 import * as colyseus from 'colyseus'
-import { Game, GameState } from '../cardsGame/index'
+import { Game, GameState, PlayerEvent } from '../cardsGame/index'
 
 import actions from './actions/index'
 
@@ -40,24 +40,8 @@ export default class WarGame extends colyseus.Room<GameState> {
     // Timeout => end game? Make player able to go back in?
   }
 
-  onMessage(client, data) {
+  onMessage(client, data: PlayerEvent) {
     console.log('MSG: ', JSON.stringify(data))
-    this.performAction(client, data)
-  }
-
-  onDispose() {
-    console.log('Dispose WarGame')
-    console.log('===========================')
-  }
-
-  /**
-   *
-   *
-   * @param {object} client or undefined, if action is needed to perform by "game" itself
-   * @param {object} data
-   * @memberof WarGame
-   */
-  performAction(client, data) {
     this.game.performAction(client, data, this.state)
       .then(status => {
         console.log('action resolved!', status)
@@ -72,14 +56,19 @@ export default class WarGame extends colyseus.Room<GameState> {
       })
   }
 
-  attatchEvents() {
-    const eventMap = {
-      gameStart: this.onGameStart,
-    }
-    this.game.on(Game.events.ACTION_COMPLETED, (actionName, status) => {
-      eventMap[actionName](status)
-    })
+  onDispose() {
+    console.log('Dispose WarGame')
+    console.log('===========================')
   }
+
+  // attatchEvents() {
+  //   const eventMap = {
+  //     gameStart: this.onGameStart,
+  //   }
+  //   this.game.on(Game.events.ACTION_COMPLETED, (actionName, status) => {
+  //     eventMap[actionName](status)
+  //   })
+  // }
 
   onGameStart() {
 

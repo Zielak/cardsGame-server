@@ -1,5 +1,6 @@
 import {
   Command,
+  Container,
   Deck,
   Pile,
   Hand,
@@ -8,21 +9,18 @@ import {
   GameState
 } from '../../cardsGame'
 
+import canStartGame from '../../cardsGame/conditions/canStartGame'
+
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
-const condition = (state, client) => new Promise((resolve, reject) => {
-  if (state.started) {
-    reject(`Game already started.`)
-  } else if (client.id !== state.host) {
-    reject(`Client '${client.id}' is not a host: '${state.host}'`)
-  } else if (state.clients.length < 1) {
-    reject(`Not enough clients: only '${state.clients.length}' clients in the room`)
-  }
-  resolve()
-})
+class GameStartCommand extends Command {
 
-const command = class GameStartCommand extends Command {
+  context: { createdPlayers: Player[], createdContainers: Container[] }
+
+  constructor(invoker) {
+    super(invoker, [canStartGame])
+  }
 
   prepare() {
     this.context.createdPlayers = []
@@ -30,6 +28,7 @@ const command = class GameStartCommand extends Command {
   }
 
   // TODO: move all that init to the gameroom itself.
+  // FIXME: ^ really? why?
   execute(invoker, state: GameState) {
     return new Promise((resolve/*, reject*/) => {
       // Gather players
@@ -105,4 +104,4 @@ const command = class GameStartCommand extends Command {
 
 }
 
-module.exports = { condition, command }
+export default GameStartCommand

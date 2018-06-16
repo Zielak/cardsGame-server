@@ -36,5 +36,6 @@ export { Game } from './game'
 export { GameState } from './state'
 export { Player } from './player'
 import * as Presets from './presets'
+export { PlayerEvent } from './events/playerEvent'
 export { Presets }
 export { Table } from './table'

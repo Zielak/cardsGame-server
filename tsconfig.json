@@ -11,10 +11,8 @@
     "moduleResolution": "node",
     "outDir": "lib",
     // "outFile": ".lib/index.js",
-    "preserveConstEnums": true,
-    "removeComments": true,
     "sourceMap": true,
-    "strictNullChecks": true,
+    // "strictNullChecks": true,
     "target": "esnext"
   },
   "include": [

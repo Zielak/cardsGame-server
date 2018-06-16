@@ -88,4 +88,8 @@ export default class PlayersManager {
   get list() {
     return this.state.list
   }
+
+  get currentPlayer() {
+    return this.state.list[this.state.currentIdx]
+  }
 }

@@ -1,8 +1,9 @@
+import Condition from './condition'
 import { Player } from '../player'
 
-export default (state, client) => new Promise((resolve, reject) => {
+const isClientPlaying: Condition = (invoker, state) => new Promise((resolve, reject) => {
   const player = Player.get(
-    state.players.list.find(player => player.clientId === client)
+    state.players.list.find(player => player.clientId === invoker)
   )
   if (!player) {
     reject(`Couldn't find this client in players list`)
@@ -10,3 +11,5 @@ export default (state, client) => new Promise((resolve, reject) => {
 
   resolve()
 })
+
+export default isClientPlaying
