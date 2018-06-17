@@ -1,21 +1,15 @@
 import { Conditions } from '../../cardsGame'
 import { DefaultCommands } from '../../cardsGame'
+import isPlayersTurn from '../../cardsGame/conditions/isPlayersTurn'
+import isClientPlaying from '../../cardsGame/conditions/isClientPlaying'
 
-const condition = (state, client) => new Promise((resolve, reject) => {
-  if (!Conditions.isPlayersTurn(state, client.id)) {
-    reject(`It's not your turn.`)
-    return
-  } else if (!Conditions.isClientPlaying(state, client.id)) {
-    reject(`Couldn't find this client in players list`)
-    return
+export default class DrawUpToThree extends DefaultCommands.DrawUpToXCommand {
+
+  constructor(invoker) {
+    super(invoker, [isPlayersTurn, isClientPlaying])
   }
-  resolve()
-})
 
-const command = DefaultCommands.DrawUpToXCommand
-
-const context = {
-  maxCards: 3
+  prepareContext() {
+    this.context.maxCards = 3
+  }
 }
-
-export default { condition, command, context }

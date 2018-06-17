@@ -3,19 +3,30 @@ import { GameState } from './state'
 
 export interface IContext { }
 
-export class Command {
+type IExecutable = Promise<string | {}> | void
+
+export interface ICommand {
+  prepareContext(): void
+  execute(invoker: string, state: GameState): IExecutable
+  undo(state: GameState): IExecutable
+}
+
+export class Command implements ICommand {
 
   conditions: Condition[]
 
-  constructor(invoker: string, conditions: Condition[]) {
+  constructor(invoker: string, conditions?: Condition[]) {
     this.conditions = conditions
   }
 
-  prepare() { }
+  prepareContext() { }
 
-  public execute(invoker: string, state: GameState/*, reducer*/) { }
-
-  public undo(state: GameState/*, reducer*/) { }
+  execute(invoker: string, state: GameState): IExecutable {
+    return Promise.resolve(`empty execute()`)
+  }
+  undo(state: GameState): IExecutable {
+    return Promise.resolve(`empty undo()`)
+  }
 
 }
 

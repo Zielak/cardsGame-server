@@ -4,8 +4,7 @@ import { BaseCard } from './baseCard'
 import { Container } from './container'
 
 import PlayersManager from './state/players'
-import ClientsManager from './state/clients'
-import { arrayManager } from './state/array'
+import StateManager from './state/stateManager'
 
 export class GameState {
 
@@ -13,20 +12,16 @@ export class GameState {
   minClients: number
   maxClients: number
 
-  clients = new ClientsManager()
+  clients = new StateManager()
   // Clients who are currently playing the game
   players = new PlayersManager()
-
-  private _cards: BaseCard[] = []
-  private _elements: Base[] = []
-  private _containers: Container[] = []
+  cards = new StateManager()
+  elements = new StateManager()
+  containers = new StateManager()
 
   // Has the game started?
   private started = false
 
-  cards = arrayManager(this._cards)
-  elements = arrayManager(this._elements)
-  containers = arrayManager(this._containers)
 
   constructor({ minClients, maxClients, host }) {
     this.minClients = minClients

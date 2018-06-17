@@ -14,7 +14,7 @@ import canStartGame from '../../cardsGame/conditions/canStartGame'
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
-class GameStartCommand extends Command {
+export default class GameStartCommand extends Command {
 
   context: { createdPlayers: Player[], createdContainers: Container[] }
 
@@ -22,7 +22,7 @@ class GameStartCommand extends Command {
     super(invoker, [canStartGame])
   }
 
-  prepare() {
+  prepareContext() {
     this.context.createdPlayers = []
     this.context.createdContainers = []
   }
@@ -84,15 +84,15 @@ class GameStartCommand extends Command {
       // Deal all cards to players after delay
       setTimeout(() => {
         // Get players decks
-        const decks = state.players.list.map(player => player.getAllByType('deck')[0])
+        const decks = state.players.map((player: Player) => player.getAllByType('deck')[0]) as Container[]
         mainDeck.deal(decks)
       }, 500)
       mainDeck.on(Deck.events.DEALT, () => {
         setTimeout(() => {
-          state.players.list.map(player => {
-            const myDeck = player.getByType<Deck>('deck')
-            const myHand = player.getByType('hand')
-            myDeck.deal(myHand, 3)
+          state.players.list.map((player: Player) => {
+            const myDeck = player.getByType('deck') as Deck
+            const myHand = player.getByType('hand') as Hand
+            myDeck.deal(myHand as Container, 3)
           })
           resolve()
         }, 500)
@@ -103,5 +103,3 @@ class GameStartCommand extends Command {
   undo() { }
 
 }
-
-export default GameStartCommand

@@ -1,13 +1,14 @@
 import { Command } from '../command'
+import { GameState } from '../state';
 
 export default class NextPlayer extends Command {
 
-  execute(invoker, state, reducer) {
-    reducer.players.next(state)
+  execute(invoker: string, state: GameState) {
+    state.players.next()
   }
 
-  undo(state, reducer) {
-    reducer.players.prev(state)
+  undo(state: GameState) {
+    state.players.prev()
   }
 
 }

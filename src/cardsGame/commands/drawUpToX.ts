@@ -4,7 +4,11 @@ import { Player } from '../player'
 
 export default class DrawUpToX extends Command {
 
-  execute(invoker, state, reducer) {
+  context: {
+    maxCards: number
+  }
+
+  execute(invoker, state) {
     return new Promise((resolve) => {
       const player = Player.get(
         state.players.list.find(player => player.clientId === invoker).id

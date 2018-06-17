@@ -11,6 +11,7 @@ export default class WarGame extends colyseus.Room<GameState> {
     this.game = new Game({ actions })
 
     this.setState(new GameState({
+      minClients: options.minClients || 2,
       maxClients: options.maxClients || 2,
       host: options.host,
     }))

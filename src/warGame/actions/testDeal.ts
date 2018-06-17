@@ -1,16 +1,16 @@
-import { Command, Deck } from '../../cardsGame/index'
+import { Command, Deck, GameState, Container } from '../../cardsGame/index'
 
-const command = class TestDealCommand extends Command {
+export default class TestDealCommand extends Command {
 
-  execute(invoker, state/*, reducer*/) {
+  execute(invoker, state: GameState) {
     return new Promise((resolve, reject) => {
       const contsCards = state.containers.filter(container => {
         return container.children.length > 0 && container.type === 'deck'
-      })
+      }) as Container[]
       console.log(`found ${contsCards.length} potential FROM candidates`)
       let idx = Math.floor(Math.random() * (contsCards.length - 1))
-      /** @type {Deck} */
-      const cont = contsCards[idx]
+
+      const cont = contsCards[idx] as Deck
       // console.log(`  choosing ${idx}: ${JSON.stringify(cont)}`)
 
       idx = Math.floor(Math.random() * (state.containers.length - 1))
@@ -26,5 +26,3 @@ const command = class TestDealCommand extends Command {
   }
 
 }
-
-module.exports = { command }

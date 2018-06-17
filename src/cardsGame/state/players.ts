@@ -1,95 +1,87 @@
 import { Player } from '../player'
+import StateManager from './stateManager';
 
-interface IPlayersState {
-  list: Player[]
-  reversed: boolean
-  currentIdx: number
-  current: Player | null
-  currentPhase: number
-}
+export default class PlayersManager extends StateManager {
+  private _reversed = false
+  private _currentIdx = 0
+  private _current: Player | null = null
+  private _currentPhase = 0
 
-export default class PlayersManager {
-  private state: IPlayersState
-  constructor() {
-    this.state = {
-      list: [],
-      reversed: false,
-      currentIdx: 0,
-      current: null,
-      currentPhase: 0
-    }
-  }
+  get reversed() { return this._reversed }
+  get currentIdx() { return this._currentIdx }
+  get current() { return this._current }
+  get currentPhase() { return this._currentPhase }
 
   add(player) {
     player.onUpdate = me => this.update(me)
-    this.state.list.push(player)
+    this.state.push(player)
   }
 
   update(player) {
-    const idx = this.state.list.indexOf(player)
-    this.state.list[idx] = player
+    const idx = this.state.indexOf(player)
+    this.state[idx] = player
   }
 
   next() {
-    let currIdx = this.state.currentIdx
-    if (!this.state.reversed) {
-      if (++currIdx > this.state.list.length - 1) {
+    let currIdx = this.currentIdx
+    if (!this.reversed) {
+      if (++currIdx > this.state.length - 1) {
         currIdx = 0
       }
     } else {
       if (--currIdx < 0) {
-        currIdx = this.state.list.length - 1
+        currIdx = this.state.length - 1
       }
     }
-    this.state.currentIdx = currIdx
-    this.state.current = this.state.list[currIdx]
+    this._currentIdx = currIdx
+    this._current = this.state[currIdx]
   }
 
   prev() {
-    let currIdx = this.state.currentIdx
-    if (this.state.reversed) {
-      if (++currIdx > this.state.list.length - 1) {
+    let currIdx = this.currentIdx
+    if (this.reversed) {
+      if (++currIdx > this.state.length - 1) {
         currIdx = 0
       }
     } else {
       if (--currIdx < 0) {
-        currIdx = this.state.list.length - 1
+        currIdx = this.state.length - 1
       }
     }
-    this.state.currentIdx = currIdx
-    this.state.current = this.state.list[currIdx]
+    this._currentIdx = currIdx
+    this._current = this.state[currIdx]
   }
 
   shuffle() {
-    let currIdx = this.state.currentIdx
-    let i = this.state.list.length
+    let currIdx = this.currentIdx
+    let i = this.state.length
     if (i === 0) {
       return
     }
     while (--i) {
       const j = Math.floor(Math.random() * (i + 1))
-      const tempi = this.state.list[i]
-      const tempj = this.state.list[j]
-      this.state.list[i] = tempj
-      this.state.list[j] = tempi
+      const tempi = this.state[i]
+      const tempj = this.state[j]
+      this.state[i] = tempj
+      this.state[j] = tempi
       // Keep the current player the same
       if (i === currIdx) {
         currIdx = j
       }
     }
-    this.state.currentIdx = currIdx
-    this.state.current = this.state.list[currIdx]
+    this._currentIdx = currIdx
+    this._current = this.state[currIdx]
   }
 
   reverse() {
-    this.state.reversed = this.state.reversed
+    this._reversed = !this._reversed
   }
 
   get list() {
-    return this.state.list
+    return this.state
   }
 
   get currentPlayer() {
-    return this.state.list[this.state.currentIdx]
+    return this.state[this._currentIdx]
   }
 }

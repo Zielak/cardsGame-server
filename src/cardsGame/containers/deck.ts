@@ -19,11 +19,11 @@ export class Deck extends Container {
    * Deals `count` cards from this container to other containers.
    * Eg. hands
    *
-   * @param {array|Container} containers
+   * @param {Container | Container[]} containers
    * @param {[number]} count how many cards should I deal for each player?
    * @returns {Deck} this for chaining
    */
-  deal(containers, count = Infinity) {
+  deal(containers: Container | Container[], count: number = Infinity) {
     let i = 0
     containers = Array.isArray(containers) ? containers : [containers]
     containers = containers.map(Container.toObject)

@@ -1,6 +1,9 @@
 // TODO: whats that even?
 
 import { Command, IContext } from '../command'
+import { Container } from '../container'
+import { GameState } from '../state'
+import Condition from '../conditions/condition';
 const containerClasses = {
   'container': require('../container'),
   'deck': require('../containers/deck'),
@@ -11,7 +14,9 @@ const containerClasses = {
 }
 
 interface ICreateContainerContext extends IContext {
-
+  newContainer?: Container
+  type?: string
+  options?: string
 }
 
 export default class CreateContainer extends Command {
@@ -27,19 +32,25 @@ export default class CreateContainer extends Command {
    *
    * @memberof CreateContainer
    */
-  constructor(conditions, context) {
-    super(context)
+  constructor(invoker: string, context: ICreateContainerContext, conditions?: Condition[]) {
+    super(invoker, conditions)
+    this.context = context
   }
 
-  execute() {
-    this.context.newContainer = new containerClasses[this.context.type](this.context.options)
-    this.context.state.containers.push(this.context.newContainer)
-  }
+  context: ICreateContainerContext
 
-  undo() {
+  execute(invoker: string, state: GameState) {
     if (!this.context.newContainer) {
-      return false
+      this.context.newContainer = new containerClasses[this.context.type](this.context.options)
+    }
+    state.containers.add(this.context.newContainer)
+  }
+
+  undo(state: GameState) {
+    if (!this.context.newContainer) {
+      return
     }
     // TODO: undo plz
+    state.containers.remove(this.context.newContainer)
   }
 }

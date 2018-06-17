@@ -1,17 +1,17 @@
 import { DefaultCommands } from '../../cardsGame'
 import GameStartCommand from './gameStart'
-import from './playCard'
-import from './drawUpToThree'
-import from './testDeal'
+import PlayCardCommand from './playCard'
+import DrawUpToThree from './drawUpToThree'
+import TestDeal from './testDeal'
 
 export default {
   GameStart: GameStartCommand,
 
-  PlayCard: require('./playCard'),
+  PlayCard: PlayCardCommand,
   NextPlayer: DefaultCommands.NextPlayer,
   PrevPlayer: DefaultCommands.PreviousPlayer,
 
-  DrawUpToThree: require('./drawUpToThree'),
+  DrawUpToThree: DrawUpToThree,
 
-  TestDeal: require('./testDeal'),
+  TestDeal: TestDeal,
 }
