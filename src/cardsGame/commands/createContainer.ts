@@ -1,6 +1,6 @@
 // TODO: whats that even?
 
-import { Command, IContext } from '../command'
+import { Command } from '../command'
 import { Container } from '../container'
 import { GameState } from '../state'
 import Condition from '../conditions/condition';
@@ -13,31 +13,20 @@ const containerClasses = {
   'spread': require('../containers/spread'),
 }
 
-interface ICreateContainerContext extends IContext {
-  newContainer?: Container
-  type?: string
-  options?: string
-}
-
 export default class CreateContainer extends Command {
 
   /**
-   * Creates an instance of CreateContainer.
-   * @param {array} conditions list of conditions to check before executing
-   * @param {CreateContainerContext} context
-   *
-   * @typedef {object} CreateContainerContext
-   * @property {string} type kind of container to create (lowercase name)
-   * @property {object} options for containers constructor
-   *
-   * @memberof CreateContainer
-   */
-  constructor(invoker: string, context: ICreateContainerContext, conditions?: Condition[]) {
-    super(invoker, conditions)
-    this.context = context
+  * @typedef {object} CreateContainerContext
+  * @property {Container} [newContainer] container already creater (OR type&options)
+  * @property {string} [type] kind of container to create (lowercase name)
+  * @property {object} [options] for containers constructor
+  */
+  /** @type {CreateContainerContext} */
+  context: {
+    newContainer?: Container
+    type?: string
+    options?: string
   }
-
-  context: ICreateContainerContext
 
   execute(invoker: string, state: GameState) {
     if (!this.context.newContainer) {

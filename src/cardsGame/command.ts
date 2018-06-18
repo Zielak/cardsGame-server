@@ -1,32 +1,25 @@
 import Condition from './conditions/condition'
 import { GameState } from './state'
 
-export interface IContext { }
-
 type IExecutable = Promise<string | {}> | void
 
-export interface ICommand {
-  prepareContext(): void
-  execute(invoker: string, state: GameState): IExecutable
-  undo(state: GameState): IExecutable
-}
-
-export class Command implements ICommand {
+export abstract class Command {
 
   conditions: Condition[]
 
-  constructor(invoker: string, conditions?: Condition[]) {
+  constructor(invoker: string, conditions?: Condition[], public context: any = {}) {
     this.conditions = conditions
+    this.prepareContext()
   }
 
-  prepareContext() { }
+  /**
+   * To be overriden. Fix-up your context here.
+   * @protected
+   */
+  protected prepareContext() { }
 
-  execute(invoker: string, state: GameState): IExecutable {
-    return Promise.resolve(`empty execute()`)
-  }
-  undo(state: GameState): IExecutable {
-    return Promise.resolve(`empty undo()`)
-  }
+  abstract execute(invoker: string, state: GameState): IExecutable
+  abstract undo(state: GameState): IExecutable
 
 }
 

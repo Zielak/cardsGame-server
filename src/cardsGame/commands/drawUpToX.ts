@@ -1,6 +1,7 @@
 import { Command } from '../command'
 import { Deck } from '../containers/deck'
 import { Player } from '../player'
+import { GameState } from '../state';
 
 export default class DrawUpToX extends Command {
 
@@ -8,7 +9,7 @@ export default class DrawUpToX extends Command {
     maxCards: number
   }
 
-  execute(invoker, state) {
+  execute(invoker, state:GameState) {
     return new Promise((resolve) => {
       const player = Player.get(
         state.players.list.find(player => player.clientId === invoker).id
@@ -23,6 +24,10 @@ export default class DrawUpToX extends Command {
         .on(Deck.events.DEALT, () => setTimeout(resolve, 250))
 
     })
+  }
+
+  undo(state:GameState) {
+
   }
 
 }

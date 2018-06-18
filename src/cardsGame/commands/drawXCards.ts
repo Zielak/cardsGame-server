@@ -1,19 +1,15 @@
-import { Command, IContext } from '../command'
+import { Command } from '../command'
 import { Container } from '../container'
 import { Player } from '../player'
 import { Deck } from '../containers/deck'
 
-export interface IDrawXCardsContext extends IContext {
-  sourceContainer: Container
-  targetContainer: Container
-  count: number
-  method?: (count: number) => number
-}
-
 export class DrawXCards extends Command {
 
-  constructor(invoker, protected context: IDrawXCardsContext) {
-    super(invoker)
+  context: {
+    sourceContainer: Container
+    targetContainer: Container
+    count: number
+    method?: (count: number) => number
   }
 
   execute(invoker, state) {

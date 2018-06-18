@@ -5,13 +5,15 @@ import { Command } from './command'
 import { EventParser } from './eventParser'
 import { PlayerEvent } from './events/playerEvent';
 
+export type MapOfCommands = Map<string, typeof Command>
+
 export interface IGameOptions {
-  actions: Command[]
+  actions: MapOfCommands
 }
 
 export class Game extends EventEmitter {
 
-  actions: Command[]
+  actions: MapOfCommands
   commandManager: CommandManager
   eventParser: EventParser
 

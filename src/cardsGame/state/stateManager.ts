@@ -1,5 +1,5 @@
 export default class StateManager {
-  state: any[]
+  state: any[] = []
   add(element) {
     element.onUpdate = (me => this.update(me))
     this.state.push(element)

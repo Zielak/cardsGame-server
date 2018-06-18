@@ -21,4 +21,8 @@ export default class PlayCardCommand extends Command {
     })
   }
 
+  undo(state: GameState) {
+
+  }
+
 }

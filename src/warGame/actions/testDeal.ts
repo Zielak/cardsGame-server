@@ -25,4 +25,8 @@ export default class TestDealCommand extends Command {
     })
   }
 
+  undo(state: GameState) {
+
+  }
+
 }

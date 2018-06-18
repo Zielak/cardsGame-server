@@ -1,9 +1,8 @@
-import { DrawXCards, IDrawXCardsContext } from './drawXCards'
+import { DrawXCards } from './drawXCards'
 
 export default class DrawTopXCards extends DrawXCards {
 
-  constructor(context: IDrawXCardsContext) {
-    super(context)
+  prepareContext() {
     this.context.method = count => count - 1
   }
 
