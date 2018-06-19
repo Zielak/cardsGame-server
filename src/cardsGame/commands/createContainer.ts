@@ -29,17 +29,23 @@ export default class CreateContainer extends Command {
   }
 
   execute(invoker: string, state: GameState) {
-    if (!this.context.newContainer) {
-      this.context.newContainer = new containerClasses[this.context.type](this.context.options)
-    }
-    state.containers.add(this.context.newContainer)
+    return new Promise(resolve => {
+      if (!this.context.newContainer) {
+        this.context.newContainer = new containerClasses[this.context.type](this.context.options)
+      }
+      state.containers.add(this.context.newContainer)
+      resolve()
+    })
   }
 
   undo(state: GameState) {
-    if (!this.context.newContainer) {
-      return
-    }
-    // TODO: undo plz
-    state.containers.remove(this.context.newContainer)
+    return new Promise(resolve => {
+      if (!this.context.newContainer) {
+        return
+      }
+      // TODO: undo plz
+      state.containers.remove(this.context.newContainer)
+      resolve()
+    })
   }
 }

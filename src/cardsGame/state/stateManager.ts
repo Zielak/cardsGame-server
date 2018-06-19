@@ -1,7 +1,9 @@
 export default class StateManager {
   state: any[] = []
   add(element) {
-    element.onUpdate = (me => this.update(me))
+    if (Object.isExtensible(element)) {
+      element.onUpdate = (me => this.update(me))
+    }
     this.state.push(element)
   }
   remove(element) {

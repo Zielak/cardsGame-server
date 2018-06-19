@@ -30,7 +30,10 @@ export class DrawXCards extends Command {
   }
 
   undo() {
+    return new Promise(resolve => {
 
+      resolve()
+    })
   }
 
 }

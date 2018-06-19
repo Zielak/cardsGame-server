@@ -1,7 +1,7 @@
 export { Base } from './base'
 export { BaseCard } from './baseCard'
 export { ClassicCard } from './classicCard'
-export { Command } from './command'
+export { Command, ICommand, IComandConstructor } from './command'
 
 import * as _DefaultCommands from './commands/index'
 export { _DefaultCommands as DefaultCommands }

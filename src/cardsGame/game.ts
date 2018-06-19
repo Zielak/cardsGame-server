@@ -1,19 +1,19 @@
 import { EventEmitter } from 'eventemitter3'
 import CommandManager from './commandManager'
 import { GameState } from './state'
-import { Command } from './command'
+import { ICommand, IComandConstructor, Command } from './command'
 import { EventParser } from './eventParser'
 import { PlayerEvent } from './events/playerEvent';
 
-export type MapOfCommands = Map<string, typeof Command>
+export type ObjectWithCommands = {[key:string] : Command }
 
 export interface IGameOptions {
-  actions: MapOfCommands
+  actions: ObjectWithCommands
 }
 
 export class Game extends EventEmitter {
 
-  actions: MapOfCommands
+  actions: ObjectWithCommands
   commandManager: CommandManager
   eventParser: EventParser
 
@@ -55,14 +55,14 @@ export class Game extends EventEmitter {
       client = Game.id
     }
 
-    const action = this.eventParser.getAction(data)
+    const command = this.eventParser.getAction(data)
 
     const actionName = data.action // TODO: OR????
 
     console.info(`-= performAction("${client.id}",`, data, `)`)
     if (!data.action) {
       console.info(`   User Event:`, data)
-      console.info(`   Found intentions: ${action.length}`)
+      // console.info(`   Found intentions: ${action.length}`)
     }
 
     return new Promise((resolve, reject) => {
@@ -74,32 +74,13 @@ export class Game extends EventEmitter {
         reject(`This client doesn't exist "${client}".`)
       }
 
-      if (action === undefined) {
+      if (command === undefined) {
         reject(`Unknown action.`)
       }
 
-      const context = {
-        data: data,
-        ...action.context
-      }
-
-      // Doesn't have condition, just run it
-      if (action.condition === undefined) {
-        console.info(`action has no conditions`)
-        this.commandManager.execute(
-          action.command, context, client, state
-        )
-          .then(this.actionCompleted(resolve, actionName))
-          .catch(this.actionFailed(reject, actionName))
-      } else {
-        // Run conditions if it's possible to do it now
-        action.condition(state, client)
-          .then(() => this.commandManager.execute(
-            action.command, context, client, state
-          ))
-          .then(this.actionCompleted(resolve, actionName))
-          .catch(this.actionFailed(reject, actionName))
-      }
+      this.commandManager.execute(command, client.id, data, state)
+        .then(this.actionCompleted(resolve, actionName))
+        .catch(this.actionFailed(reject, actionName))
     })
   }
 

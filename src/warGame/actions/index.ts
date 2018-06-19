@@ -1,16 +1,16 @@
-import { DefaultCommands, Command } from '../../cardsGame'
+import { DefaultCommands, Command, ICommand, IComandConstructor } from '../../cardsGame'
 import GameStartCommand from './gameStart'
 import PlayCardCommand from './playCard'
 import DrawUpToThree from './drawUpToThree'
 import TestDeal from './testDeal'
 
-const actionsMap = new Map<string, typeof Command>()
+const actions: {[key:string] : Command } = {}
 
-actionsMap.set('GameStart', GameStartCommand)
-actionsMap.set('PlayCard', PlayCardCommand)
-actionsMap.set('NextPlayer', DefaultCommands.NextPlayer)
-actionsMap.set('PrevPlayer', DefaultCommands.PreviousPlayer)
-actionsMap.set('DrawUpToThree', DrawUpToThree)
-actionsMap.set('TestDeal', TestDeal)
+actions.GameStart = new GameStartCommand()
+actions.PlayCard = new PlayCardCommand()
+actions.NextPlayer = new DefaultCommands.NextPlayer()
+actions.PrevPlayer = new DefaultCommands.PreviousPlayer()
+actions.DrawUpToThree = new DrawUpToThree()
+actions.TestDeal = new TestDeal()
 
-export default actionsMap
+export default actions

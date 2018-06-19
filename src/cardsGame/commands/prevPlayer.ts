@@ -4,11 +4,17 @@ import { GameState } from '../state'
 export default class PreviousPlayer extends Command {
 
   execute(invoker: string, state: GameState) {
-    state.players.prev()
+    return new Promise(resolve => {
+      state.players.prev()
+      resolve()
+    })
   }
 
   undo(state: GameState) {
-    state.players.next()
+    return new Promise(resolve => {
+      state.players.next()
+      resolve()
+    })
   }
 
 }

@@ -1,4 +1,5 @@
-import { Command } from './command'
+import { Command, ICommand } from './command'
+import { GameState } from './state';
 
 export default class CommandManager {
 
@@ -10,18 +11,21 @@ export default class CommandManager {
     this.lastCommand = null
   }
 
-  /**
-   *
-   * @param {Command} command
-   * @param {*} invoker
-   * @param {*} state
-   */
-  execute(command, context, invoker, state) {
-    const newCommand = new command(context)
-    this.commands.push(newCommand)
-    this.lastCommand = newCommand
-    newCommand.prepare()
-    return newCommand.execute(invoker, state)
+  execute(command: Command, invoker, context: any, state: GameState): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.isExecutable(command, invoker, context, state).then(() => {
+        this.commands.push(command)
+        this.lastCommand = command
+        command.execute(invoker, state).then(resolve).catch(reject)
+      }).catch(reject)
+    })
+  }
+
+  private isExecutable(command: Command, invoker, context: any, state: GameState): Promise<any> {
+    const promises = command.conditions.map(condition => {
+      return condition(invoker, state, context)
+    })
+    return Promise.all(promises)
   }
 
   get canUndo() {

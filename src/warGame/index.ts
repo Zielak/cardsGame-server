@@ -48,7 +48,6 @@ export default class WarGame extends colyseus.Room<GameState> {
         console.log('action resolved!', status)
       })
       .catch(status => {
-        console.error('action failed!', status)
         this.broadcast({
           event: 'game.error',
           data: `Client "${client.id}" failed to perform "${data.action}" action.

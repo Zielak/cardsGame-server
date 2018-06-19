@@ -1,7 +1,6 @@
 import { Command } from '../command'
 import { Container } from '../container'
 import { BaseCard } from '../baseCard'
-import { getElementById } from '../utils'
 import { GameState } from '../state'
 
 export default class MoveCardToContainer extends Command {
@@ -20,12 +19,18 @@ export default class MoveCardToContainer extends Command {
   }
 
   execute(invoker, state: GameState) {
-    // const card: BaseCard = getElementById(state.cards, this.context.card.id)
-    // this.context.container.addChild(card)
+    return new Promise(resolve => {
+      // const card: BaseCard = getElementById(state.cards, this.context.card.id)
+      // this.context.container.addChild(card)
+      resolve()
+    })
   }
 
   undo(state: GameState) {
+    return new Promise(resolve => {
 
+      resolve()
+    })
   }
 
 }

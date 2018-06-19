@@ -1,14 +1,20 @@
 import Condition from './conditions/condition'
 import { GameState } from './state'
 
-type IExecutable = Promise<string | {}> | void
+type IExecutable = Promise<string | {}>
 
-export abstract class Command {
+export interface ICommand {
+  context?: {}
+  conditions?: Condition[]
+}
 
-  conditions: Condition[]
+export interface IComandConstructor {
+  new(context: any, conditions: Condition[]): Command
+}
 
-  constructor(invoker: string, conditions?: Condition[], public context: any = {}) {
-    this.conditions = conditions
+export abstract class Command implements ICommand {
+
+  constructor(public context: any = {}, public conditions: Condition[] = []) {
     this.prepareContext()
   }
 

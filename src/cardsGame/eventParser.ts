@@ -1,22 +1,24 @@
 import { toArray } from './utils'
-import { Command } from './command'
+import { Command, ICommand } from './command'
 import { PlayerEvent } from './events/playerEvent'
-import { MapOfCommands } from './game'
+import { ObjectWithCommands } from './game'
 
 export class EventParser {
 
-  constructor(private actions: MapOfCommands) {
+  constructor(private actions: ObjectWithCommands) {
 
   }
 
   getAction(data: PlayerEvent) {
     // Get action object, if its simple action or user interaction?
-    const action = data.action ?
-      this.actions.get(data.action) :
-      this.mapEventToIntention(data)
+    // const action = data.action ?
+    //   this.actions.get(data.action) :
+    //   this.mapEventToIntention(data)
+    const action = this.actions[data.action]
     return action
   }
 
+  /*
   mapEventToIntention(playerEvent) {
     const actions = this.actions
     const actionKeys = Object.keys(actions)
@@ -30,6 +32,7 @@ export class EventParser {
     })
     return matchedContext
   }
+  */
 }
 
 const eventTypeMatches = (playerEvent, actionContext) => {

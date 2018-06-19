@@ -27,7 +27,10 @@ export default class DrawUpToX extends Command {
   }
 
   undo(state:GameState) {
+    return new Promise(resolve => {
 
+      resolve()
+    })
   }
 
 }

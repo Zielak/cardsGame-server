@@ -18,13 +18,11 @@ export default class GameStartCommand extends Command {
 
   context: { createdPlayers: Player[], createdContainers: Container[] }
 
-  constructor(invoker) {
-    super(invoker, [canStartGame])
-  }
-
-  prepareContext() {
-    this.context.createdPlayers = []
-    this.context.createdContainers = []
+  constructor() {
+    super({
+      createdPlayers: [],
+      createdContainers: []
+    }, [canStartGame])
   }
 
   // TODO: move all that init to the gameroom itself.
@@ -100,6 +98,11 @@ export default class GameStartCommand extends Command {
     })
   }
 
-  undo() { }
+  undo() {
+    return new Promise(resolve => {
+
+      resolve()
+    })
+  }
 
 }

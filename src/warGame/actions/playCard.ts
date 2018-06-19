@@ -1,7 +1,6 @@
 import { Command, BaseCard, GameState, Container } from '../../cardsGame'
 import isPlayersTurn from '../../cardsGame/conditions/isPlayersTurn'
 
-
 export default class PlayCardCommand extends Command {
 
   context: {
@@ -9,8 +8,8 @@ export default class PlayCardCommand extends Command {
     target: Container
   }
 
-  constructor(invoker, context) {
-    super(invoker, [isPlayersTurn])
+  constructor() {
+    super({ card: null, target: null }, [isPlayersTurn])
   }
 
   // TODO: finish and test me
@@ -22,7 +21,10 @@ export default class PlayCardCommand extends Command {
   }
 
   undo(state: GameState) {
+    return new Promise(resolve => {
 
+      resolve()
+    })
   }
 
 }
