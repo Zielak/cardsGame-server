@@ -3,9 +3,9 @@ import CommandManager from './commandManager'
 import { GameState } from './state'
 import { ICommand, IComandConstructor, Command } from './command'
 import { EventParser } from './eventParser'
-import { PlayerEvent } from './events/playerEvent';
+import { PlayerEvent } from './events/playerEvent'
 
-export type ObjectWithCommands = {[key:string] : Command }
+export type ObjectWithCommands = { [key: string]: Command }
 
 export interface IGameOptions {
   actions: ObjectWithCommands
