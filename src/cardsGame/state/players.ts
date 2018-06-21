@@ -1,7 +1,7 @@
 import { Player } from '../player'
 import StateManager from './stateManager';
 
-export default class PlayersManager extends StateManager {
+export default class PlayersManager extends StateManager<Player> {
   private _reversed = false
   private _currentIdx = 0
   private _current: Player | null = null

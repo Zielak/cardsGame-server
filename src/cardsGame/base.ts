@@ -195,8 +195,8 @@ export abstract class Base extends EventEmitter {
    * @returns {Array<object>} list of found elements
    * @memberof Base
    */
-  getAllByType<T>(type: string, deep = true) {
-    const nested: Array<T> = []
+  getAllByType<T>(type: string, deep = true): T[] {
+    const nested: T[] = []
     const found = this.children
       .map(Base.toObject)
       .filter(el => {
@@ -205,7 +205,7 @@ export abstract class Base extends EventEmitter {
         }
         return el.type === type
       })
-    const retArray = [...found, ...nested]
+    const retArray: T[] = [...found, ...nested]
     return retArray
   }
 

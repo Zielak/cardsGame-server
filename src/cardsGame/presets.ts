@@ -4,7 +4,7 @@ export const classicCards = () => {
   const ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A']
   const suits = ['H', 'S', 'C', 'D']
 
-  const cards = suits.reduce((prevS, suit) => [
+  const cards: ClassicCard[] = suits.reduce((prevS, suit) => [
     ...prevS,
     ...ranks.reduce((prevR, rank) => [
       ...prevR,

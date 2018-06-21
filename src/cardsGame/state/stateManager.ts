@@ -1,5 +1,5 @@
-export default class StateManager {
-  state: any[] = []
+export default class StateManager<T> {
+  state: T[] = []
   add(element) {
     if (Object.isExtensible(element)) {
       element.onUpdate = (me => this.update(me))
@@ -15,16 +15,18 @@ export default class StateManager {
     this.state[idx] = element
   }
 
-  map(predicate) {
+  map<U>(predicate: (value: T, index?: number, array?: T[]) => U): U[] {
     return this.state.map(predicate)
   }
-  filter(predicate) {
+  find(predicate: (value: T, index?: number, obj?: T[]) => boolean): T {
+    return this.state.find(predicate)
+  }
+  filter(predicate: (value: T, index?: number, array?: T[]) => boolean): T[] {
     return this.state.filter(predicate)
   }
-  includes(element, fromIndex?) {
+  includes(element: T, fromIndex?: number): boolean {
     return this.state.includes(element, fromIndex)
   }
-  get length(): number {
-    return this.state.length
-  }
+
+  get length(): number { return this.state.length }
 }
