@@ -1,7 +1,7 @@
 import { EventEmitter } from 'eventemitter3'
 import CommandManager from './commandManager'
 import { GameState } from './state'
-import { ICommand, IComandConstructor, Command } from './command'
+import { Command } from './command'
 import { EventParser } from './eventParser'
 import { PlayerEvent } from './events/playerEvent'
 
@@ -19,7 +19,6 @@ export class Game extends EventEmitter {
 
   constructor(options: IGameOptions) {
     super()
-
     this.actions = options.actions
 
     this.commandManager = new CommandManager()

@@ -1,77 +1,40 @@
-import * as colyseus from 'colyseus'
-import { Game, GameState, PlayerEvent } from '../cardsGame/index'
+import {
+  DefaultCommands, Command, Deck, Presets, GameState, GameRoom
+} from '../cardsGame/index'
 
-import actions from './actions/index'
+import GameStartCommand from './actions/gameStart'
+import PlayCardCommand from './actions/playCard'
+import DrawUpToThree from './actions/drawUpToThree'
+import TestDeal from './actions/testDeal'
 
-export default class WarGame extends colyseus.Room<GameState> {
+export default class WarGame extends GameRoom {
 
-  game: Game
-
-  onInit(options) {
-    this.game = new Game({ actions })
-
-    this.setState(new GameState({
-      minClients: options.minClients || 2,
-      maxClients: options.maxClients || 2,
-      host: options.host,
-    }))
-
-    console.log('WarGame room created!', options)
-  }
-
-  requestJoin() {
-    const res = this.clients.length < this.state.maxClients
-    if (!res) {
-      console.log('WarGame - rejected new client!')
-    }
-    return this.clients.length < this.state.maxClients
-  }
-
-  onJoin(client) {
-    console.log('WarGame: JOINED: ', client.id)
-    this.state.clients.add(client.id)
-    if (!this.state.host) {
-      this.state.host = client.id
+  setActions() {
+    return {
+      GameStart: new GameStartCommand(),
+      PlayCard: new PlayCardCommand(),
+      NextPlayer: new DefaultCommands.NextPlayer(),
+      PrevPlayer: new DefaultCommands.PreviousPlayer(),
+      DrawUpToThree: new DrawUpToThree(),
+      TestDeal: new TestDeal()
     }
   }
 
-  onLeave(client) {
-    this.state.clients.remove(client.id)
-    // TODO: Handle leave when the game is running
-    // Timeout => end game? Make player able to go back in?
+  setupGame() {
+    const mainDeck = new Deck({
+      x: 0, y: 0, name: WarGame.names.MainDeck
+    })
+    this.state.containers.add(mainDeck)
+
+    // Setup all cards
+    Presets.classicCards().forEach(card => {
+      this.state.cards.add(card)
+      mainDeck.addChild(card)
+    })
   }
 
-  onMessage(client, data: PlayerEvent) {
-    console.log('MSG: ', JSON.stringify(data))
-    this.game.performAction(client, data, this.state)
-      .then(status => {
-        console.log('action resolved!', status)
-      })
-      .catch(status => {
-        this.broadcast({
-          event: 'game.error',
-          data: `Client "${client.id}" failed to perform "${data.action}" action.
-          Details: ${status}`
-        })
-      })
-  }
-
-  onDispose() {
-    console.log('Dispose WarGame')
-    console.log('===========================')
-  }
-
-  // attatchEvents() {
-  //   const eventMap = {
-  //     gameStart: this.onGameStart,
-  //   }
-  //   this.game.on(Game.events.ACTION_COMPLETED, (actionName, status) => {
-  //     eventMap[actionName](status)
-  //   })
-  // }
-
-  onGameStart() {
-
+  static names = {
+    MainDeck: 'mainDeck'
   }
 
 }

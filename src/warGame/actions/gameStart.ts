@@ -5,9 +5,9 @@ import {
   Pile,
   Hand,
   Player,
-  Presets,
   GameState
 } from '../../cardsGame'
+import WarGame from '..'
 
 import canStartGame from '../../cardsGame/conditions/canStartGame'
 
@@ -40,12 +40,6 @@ export default class GameStartCommand extends Command {
         state.players.add(newPlayer)
       })
 
-      const mainDeck = new Deck({
-        x: 0, y: 0,
-      })
-      this.context.createdContainers.push(mainDeck)
-      state.containers.add(mainDeck)
-
       // Set the table, empty decks and rows
       state.players.list.forEach(player => {
         // TODO: remember all other created stuff, so we could undo() that later
@@ -71,18 +65,15 @@ export default class GameStartCommand extends Command {
         }))
       })
 
-      // Setup all cards
-      Presets.classicCards().forEach(card => {
-        state.cards.add(card)
-        mainDeck.addChild(card)
-      })
-
       state.gameStart()
 
       // Deal all cards to players after delay
+      const mainDeck = state.containers.find(container => container.name === WarGame.names.MainDeck) as Deck
       setTimeout(() => {
         // Get players decks
-        const decks = state.players.map((player: Player) => player.getAllByType('deck')[0]) as Container[]
+        const decks = state.players.map((player: Player) => {
+          return player.getAllByType<Container>('deck')[0] as Container
+        })
         mainDeck.deal(decks)
       }, 500)
       mainDeck.on(Deck.events.DEALT, () => {

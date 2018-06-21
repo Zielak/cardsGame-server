@@ -34,6 +34,7 @@ export { Spread } from './containers/spread'
 
 export { Game } from './game'
 export { GameState } from './state'
+export { GameRoom } from './gameRoom'
 export { Player } from './player'
 import * as Presets from './presets'
 export { PlayerEvent } from './events/playerEvent'
