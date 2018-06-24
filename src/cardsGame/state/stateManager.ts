@@ -1,32 +1,67 @@
-export default class StateManager<T> {
-  state: T[] = []
-  add(element) {
+import { Base } from '../base'
+import { TextDecoder } from 'util';
+
+export default class StateManager<T extends Base> {
+  state: { [key: string]: T } = {}
+  add(element: T) {
     if (Object.isExtensible(element)) {
       element.onUpdate = (me => this.update(me))
     }
-    this.state.push(element)
+    this.state[element.id] = element
   }
   remove(element) {
-    // TODO: first see if I found and am able to remove any element
-    this.state = this.state.filter(el => el !== element)
+    delete this.state[element.id]
   }
   update(element) {
-    const idx = this.state.indexOf(element)
-    this.state[idx] = element
+    // TODO: maybe for each prop do the thing?
+    this.state[element.id] = element
   }
 
-  map<U>(predicate: (value: T, index?: number, array?: T[]) => U): U[] {
-    return this.state.map(predicate)
+  map(predicate: (value: T, index?: number/*, array?: T[]*/) => T): T[] {
+    let i = 0
+    const arr: T[] = []
+    for (let key in this.state) {
+      predicate(this.state[key], i)
+      arr.push(this.state[key])
+      i++
+    }
+    return arr
   }
-  find(predicate: (value: T, index?: number, obj?: T[]) => boolean): T {
-    return this.state.find(predicate)
+  forEach(predicate: (value: T, index?: number, array?: T[]) => T): void {
+    let i = 0
+    for (let key in this.state) {
+      predicate(this.state[key], i)
+      i++
+    }
   }
-  filter(predicate: (value: T, index?: number, array?: T[]) => boolean): T[] {
-    return this.state.filter(predicate)
+  find(predicate: (value: T, index?: number/*, arr?: T[]*/) => boolean): T {
+    let i = 0
+    for (let key in this.state) {
+      if (predicate(this.state[key], i)) {
+        return this.state[key]
+      }
+      i++
+    }
   }
-  includes(element: T, fromIndex?: number): boolean {
-    return this.state.includes(element, fromIndex)
+  filter(predicate: (value: T, index?: number/*, array?: T[]*/) => boolean): T[] {
+    let i = 0
+    const arr: T[] = []
+    for (let key in this.state) {
+      if (predicate(this.state[key], i)) {
+        arr.push(this.state[key])
+      }
+      i++
+    }
+    return arr
+  }
+  includes(element: T/*, fromIndex?: number*/): boolean {
+    for (let key in this.state) {
+      if (this.state.key === element) {
+        return true
+      }
+    }
+    return false
   }
 
-  get length(): number { return this.state.length }
+  get length(): number { return Object.keys(this.state).length }
 }

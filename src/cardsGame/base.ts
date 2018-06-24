@@ -28,6 +28,7 @@ export abstract class Base extends EventEmitter {
 
   children: Array<string>
 
+  @nosync
   onUpdate: Function
 
 

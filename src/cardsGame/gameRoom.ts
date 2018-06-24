@@ -7,8 +7,8 @@ interface IGameRoom {
   game: Game
   actions: ObjectWithCommands
 
-  setupGame: () => void
-  setActions: () => ObjectWithCommands
+  setupGame(): void
+  setActions(): ObjectWithCommands
 }
 
 export class GameRoom extends colyseus.Room<GameState> implements IGameRoom {
@@ -17,7 +17,7 @@ export class GameRoom extends colyseus.Room<GameState> implements IGameRoom {
   actions: ObjectWithCommands
 
   setupGame() { }
-  setActions() { return {} }
+  setActions(): ObjectWithCommands { return {} }
 
   onInit(options) {
     this.setState(new GameState({
@@ -26,6 +26,7 @@ export class GameRoom extends colyseus.Room<GameState> implements IGameRoom {
       host: options.host,
     }))
 
+    this.actions = this.setActions()
     this.setupGame()
     this.game = new Game({
       actions: this.actions
@@ -34,7 +35,7 @@ export class GameRoom extends colyseus.Room<GameState> implements IGameRoom {
     console.log('WarGame room created!', options)
   }
 
-  requestJoin() {
+  requestJoin(options, isNew) {
     const res = this.clients.length < this.state.maxClients
     if (!res) {
       console.log('rejected new client!')
@@ -42,7 +43,7 @@ export class GameRoom extends colyseus.Room<GameState> implements IGameRoom {
     return this.clients.length < this.state.maxClients
   }
 
-  onJoin(client) {
+  onJoin(client: colyseus.Client, options, auth) {
     console.log('JOINED: ', client.id)
     this.state.clients.add(client.id)
     if (!this.state.host) {
@@ -50,13 +51,13 @@ export class GameRoom extends colyseus.Room<GameState> implements IGameRoom {
     }
   }
 
-  onLeave(client) {
+  onLeave(client: colyseus.Client) {
     this.state.clients.remove(client.id)
     // TODO: Handle leave when the game is running
     // Timeout => end game? Make player able to go back in?
   }
 
-  onMessage(client, data: PlayerEvent) {
+  onMessage(client: colyseus.Client, data: PlayerEvent) {
     console.log('MSG: ', JSON.stringify(data))
     this.game.performAction(client, data, this.state)
       .then(status => {

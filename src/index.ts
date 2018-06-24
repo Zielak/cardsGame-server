@@ -25,7 +25,11 @@ const gameServer = new colyseus.Server({ server: httpServer })
 
 // Register Lobby as 'lobby'
 // gameServer.register('lobby', Lobby)
-gameServer.register('warGame', rooms.WarGame)
+gameServer.register('warGame', rooms.WarGame).
+  on('create', room => console.log('room created:', room.roomId)).
+  on('dispose', room => console.log('room disposed:', room.roomId)).
+  on('join', (room, client) => console.log(client.id, 'joined', room.roomId)).
+  on('leave', (room, client) => console.log(client.id, 'left', room.roomId));
 
 app.use(express.static(path.join(__dirname, 'static')))
 app.use('/', serveIndex(path.join(__dirname, 'static'), { 'icons': true }))

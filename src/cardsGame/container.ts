@@ -7,6 +7,7 @@ export interface IContainerOptions extends IBaseOptions {
 
 export class Container extends Base {
 
+  // FIXME: are conditions required on the CONTAINER?!?!
   conditions: Conditions
 
   constructor(options: IContainerOptions) {
@@ -22,7 +23,7 @@ export class Container extends Base {
 
   /**
    * Shuffle all elements, Fisher yates shuffle
-   * 
+   *
    * @return {Container} this for chaining
    */
   shuffle() {
