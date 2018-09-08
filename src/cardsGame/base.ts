@@ -3,7 +3,7 @@ import { def, noop } from './utils'
 import { EventEmitter } from 'eventemitter3'
 import { nosync } from 'colyseus'
 
-const objects = new Map()
+const objects = new Map<string, Base>()
 
 export interface IBaseOptions {
   type?: string
@@ -75,7 +75,6 @@ export abstract class Base extends EventEmitter {
    *
    * @readonly
    * @return {Player|null} `Player` or `null` if this container doesn't belong to anyone
-   * @memberof Base
    */
   get owner() {
     if (typeof this.parentId === 'string') {
@@ -117,7 +116,6 @@ export abstract class Base extends EventEmitter {
    *
    * @param {Base|string} newParent
    * @returns this
-   * @memberof Base
    */
   moveTo(newParent: Base | string) {
     let targetElement: Base
@@ -136,7 +134,6 @@ export abstract class Base extends EventEmitter {
    *
    * @param {any|string} element reference to an object or its ID
    * @returns this
-   * @memberof Base
    */
   addChild(element) {
     const child: Base = typeof element === 'string' ? Base.get(element) : element
@@ -163,7 +160,6 @@ export abstract class Base extends EventEmitter {
    *
    * @param {any|string} element reference to an object or its ID
    * @returns this
-   * @memberof Base
    */
   removeChild(element) {
     const child = typeof element === 'string' ? Base.get(element) : element
@@ -194,7 +190,6 @@ export abstract class Base extends EventEmitter {
    * @param {string} type what kind of elements do you want
    * @param {boolean} [deep=true] deep search?
    * @returns {Array<object>} list of found elements
-   * @memberof Base
    */
   getAllByType<T>(type: string, deep = true): T[] {
     const nested: T[] = []
@@ -226,14 +221,9 @@ export abstract class Base extends EventEmitter {
 
   /**
    * Get a reference to the object by its ID
-   *
-   * @static
-   * @param {string} id
-   * @returns {any}
-   * @memberof Base
    */
-  static get(id) {
-    return objects.get(id)
+  static get<T extends Base>(id: string): T {
+    return <T>objects.get(id)
   }
 
   /**
@@ -242,7 +232,6 @@ export abstract class Base extends EventEmitter {
    * @static
    * @param {any} element preferably string ID
    * @returns {object}
-   * @memberof Base
    */
   static toObject(element) {
     return typeof element === 'string' ? Base.get(element) : element
@@ -252,7 +241,6 @@ export abstract class Base extends EventEmitter {
    * Only for testing. Do not use while playing
    *
    * @static
-   * @memberof Base
    */
   static _clear() {
     objects.clear()
@@ -269,4 +257,4 @@ nosync(Base.prototype, '_eventsCount')
 nosync(Base.prototype, '_maxListeners')
 nosync(Base.prototype, 'domain')
 
-nosync(Base.prototype, 'onUpdate')
+// nosync(Base.prototype, 'onUpdate')

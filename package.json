@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "colyseus": "^0.9.9",
+    "colyseus": "^0.9.15",
     "cross-env": "^5.1.6",
     "express": "^4.16.3",
     "serve-index": "^1.9.1",

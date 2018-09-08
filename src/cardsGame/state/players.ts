@@ -1,5 +1,5 @@
 import { Player } from '../player'
-import StateManager from './stateManager';
+import StateManager from './stateManager'
 
 export default class PlayersManager extends StateManager<Player> {
   private _reversed = false
@@ -12,12 +12,12 @@ export default class PlayersManager extends StateManager<Player> {
   get current() { return this._current }
   get currentPhase() { return this._currentPhase }
 
-  add(player) {
+  add(player: Player) {
     player.onUpdate = me => this.update(me)
     this.state.push(player)
   }
 
-  update(player) {
+  update(player: Player) {
     const idx = this.state.indexOf(player)
     this.state[idx] = player
   }

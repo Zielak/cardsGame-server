@@ -1,8 +1,10 @@
 import { Base } from '../base'
-import { TextDecoder } from 'util';
+import { TextDecoder } from 'util'
 
 export default class StateManager<T extends Base> {
-  state: { [key: string]: T } = {}
+  // state: { [key: string]: T } = {}
+  state: T[]
+
   add(element: T) {
     if (Object.isExtensible(element)) {
       element.onUpdate = (me => this.update(me))

@@ -1,7 +1,8 @@
 import { Command } from '../command'
 import { Deck } from '../containers/deck'
 import { Player } from '../player'
-import { GameState } from '../state';
+import { GameState } from '../state'
+import { Hand } from '../containers/hand'
 
 export default class DrawUpToX extends Command {
 
@@ -9,14 +10,16 @@ export default class DrawUpToX extends Command {
     maxCards: number
   }
 
-  execute(invoker, state:GameState) {
+  execute(invoker, state: GameState) {
     return new Promise((resolve) => {
       const player = Player.get(
-        state.players.list.find(player => player.clientId === invoker).id
+        state.players.list.find(
+          player => player.clientId === invoker
+        ).id
       )
 
-      const myDeck = player.getByType('deck')
-      const myHand = player.getByType('hand')
+      const myDeck = <Deck>player.getByType('deck')
+      const myHand = <Hand>player.getByType('hand')
 
       const cardsToTake = this.context.maxCards - myHand.length
 
@@ -26,7 +29,7 @@ export default class DrawUpToX extends Command {
     })
   }
 
-  undo(state:GameState) {
+  undo(state: GameState) {
     return new Promise(resolve => {
 
       resolve()
