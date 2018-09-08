@@ -3,6 +3,7 @@ import StateManager from './state/stateManager'
 import { Container } from './container'
 import { Base } from './base'
 import { BaseCard } from './baseCard'
+import PrimitivesStateManager from './state/primitivesStateManager'
 
 export class GameState {
 
@@ -10,7 +11,7 @@ export class GameState {
   minClients: number
   maxClients: number
 
-  clients = new StateManager<string>()
+  clients = new PrimitivesStateManager<string>()
   // Clients who are currently playing the game
   players = new PlayersManager()
   cards = new StateManager<BaseCard>()

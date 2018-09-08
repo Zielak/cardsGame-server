@@ -72,13 +72,13 @@ export default class GameStartCommand extends Command {
       setTimeout(() => {
         // Get players decks
         const decks = state.players.map((player: Player) => {
-          return player.getAllByType<Container>('deck')[0] as Container
+          return player.getAllByType('deck')[0] as Deck
         })
         mainDeck.deal(decks)
       }, 500)
       mainDeck.on(Deck.events.DEALT, () => {
         setTimeout(() => {
-          state.players.list.map((player: Player) => {
+          state.players.map((player: Player) => {
             const myDeck = player.getByType('deck') as Deck
             const myHand = player.getByType('hand') as Hand
             myDeck.deal(myHand as Container, 3)

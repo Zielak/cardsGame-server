@@ -65,11 +65,11 @@ export class Game extends EventEmitter {
     }
 
     return new Promise((resolve, reject) => {
-      if (!state.clients || state.clients.length <= 0) {
+      if (!state.clients || state.clients.size <= 0) {
         reject(`There are no clients.`)
       }
 
-      if (state.clients.includes(client)) {
+      if (state.clients.some(client)) {
         reject(`This client doesn't exist "${client}".`)
       }
 

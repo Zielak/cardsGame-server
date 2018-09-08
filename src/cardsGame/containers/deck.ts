@@ -21,21 +21,20 @@ export class Deck extends Container {
    *
    * @param {Container | Container[]} containers
    * @param {[number]} count how many cards should I deal for each player?
-   * @returns {Deck} this for chaining
    */
-  deal(containers: Container | Container[], count: number = Infinity) {
+  deal(containers: Container | Container[], count: number = Infinity): Deck {
     let i = 0
     containers = Array.isArray(containers) ? containers : [containers]
-    containers = containers.map(Container.toObject)
-    const maxDeals = count * containers.length
+    const targetContainers = containers.map(Container.toObject)
+    const maxDeals = count * targetContainers.length
 
     const dealOne = () => {
-      const card: BaseCard = this.top()
+      const card = this.top() as BaseCard
       if (!card) {
         this.onCardsDealt()
         return
       }
-      card.moveTo(containers[i % containers.length])
+      card.moveTo(targetContainers[i % targetContainers.length])
       i++
       if (this.children.length > 0 && i < maxDeals) {
         setTimeout(dealOne, 50)
@@ -48,7 +47,7 @@ export class Deck extends Container {
     return this
   }
 
-  onCardsDealt() {
+  private onCardsDealt() {
     this.emit(Deck.events.DEALT)
     console.log('Deck: Done dealing cards.')
   }

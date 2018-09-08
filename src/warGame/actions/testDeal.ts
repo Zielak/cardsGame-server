@@ -13,7 +13,7 @@ export default class TestDealCommand extends Command {
       const cont = contsCards[idx] as Deck
       // console.log(`  choosing ${idx}: ${JSON.stringify(cont)}`)
 
-      idx = Math.floor(Math.random() * (state.containers.length - 1))
+      idx = Math.floor(Math.random() * (state.containers.size - 1))
       const targetCont = state.containers[idx]
 
       if (cont) {

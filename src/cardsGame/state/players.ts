@@ -12,25 +12,15 @@ export default class PlayersManager extends StateManager<Player> {
   get current() { return this._current }
   get currentPhase() { return this._currentPhase }
 
-  add(player: Player) {
-    player.onUpdate = me => this.update(me)
-    this.state.push(player)
-  }
-
-  update(player: Player) {
-    const idx = this.state.indexOf(player)
-    this.state[idx] = player
-  }
-
   next() {
     let currIdx = this.currentIdx
     if (!this.reversed) {
-      if (++currIdx > this.state.length - 1) {
+      if (++currIdx > this.state.size - 1) {
         currIdx = 0
       }
     } else {
       if (--currIdx < 0) {
-        currIdx = this.state.length - 1
+        currIdx = this.state.size - 1
       }
     }
     this._currentIdx = currIdx
@@ -40,12 +30,12 @@ export default class PlayersManager extends StateManager<Player> {
   prev() {
     let currIdx = this.currentIdx
     if (this.reversed) {
-      if (++currIdx > this.state.length - 1) {
+      if (++currIdx > this.state.size - 1) {
         currIdx = 0
       }
     } else {
       if (--currIdx < 0) {
-        currIdx = this.state.length - 1
+        currIdx = this.state.size - 1
       }
     }
     this._currentIdx = currIdx
@@ -54,7 +44,7 @@ export default class PlayersManager extends StateManager<Player> {
 
   shuffle() {
     let currIdx = this.currentIdx
-    let i = this.state.length
+    let i = this.state.size
     if (i === 0) {
       return
     }

@@ -18,7 +18,7 @@ export interface IBaseOptions {
 
 export abstract class Base extends EventEmitter {
 
-  id: string
+  id: BaseObjectID
   type: string | undefined
   name: string | undefined
   parentId: string | null
@@ -26,7 +26,7 @@ export abstract class Base extends EventEmitter {
   width: number
   height: number
 
-  children: Array<string>
+  children: Array<BaseObjectID>
 
   @nosync
   onUpdate: Function
@@ -93,8 +93,6 @@ export abstract class Base extends EventEmitter {
 
   /**
    * Gives you the topmost element in this container
-   *
-   * @return {object}
    */
   top() {
     return Base.get(this.children[this.children.length - 1])
@@ -102,8 +100,6 @@ export abstract class Base extends EventEmitter {
 
   /**
    * Gives you an element from the bottom
-   *
-   * @return {object}
    */
   bottom() {
     return Base.get(this.children[0])
@@ -133,7 +129,6 @@ export abstract class Base extends EventEmitter {
    * knows about this change.
    *
    * @param {any|string} element reference to an object or its ID
-   * @returns this
    */
   addChild(element) {
     const child: Base = typeof element === 'string' ? Base.get(element) : element
@@ -189,10 +184,10 @@ export abstract class Base extends EventEmitter {
    *
    * @param {string} type what kind of elements do you want
    * @param {boolean} [deep=true] deep search?
-   * @returns {Array<object>} list of found elements
+   * @returns {Array<Base>} list of found elements
    */
-  getAllByType<T>(type: string, deep = true): T[] {
-    const nested: T[] = []
+  getAllByType(type: string, deep = true): Base[] {
+    const nested: Base[] = []
     const found = this.children
       .map(Base.toObject)
       .filter(el => {
@@ -201,7 +196,21 @@ export abstract class Base extends EventEmitter {
         }
         return el.type === type
       })
-    const retArray: T[] = [...found, ...nested]
+    const retArray = [...found, ...nested]
+    return retArray
+  }
+
+  getAllByClass(expectedClass: typeof Base, deep = true) {
+    const nested: Base[] = []
+    const found = this.children
+      .map(Base.toObject)
+      .filter(el => {
+        if (deep && el.children.length > 1) {
+          nested.push(...el.getAllByClass(expectedClass))
+        }
+        return typeof el === typeof expectedClass
+      })
+    const retArray = [...found, ...nested]
     return retArray
   }
 
@@ -210,8 +219,8 @@ export abstract class Base extends EventEmitter {
    * Order or lookup is not defined
    * (you should be certain that there's only one element of that type)
    */
-  getByType<T>(type: string): T {
-    const ret = this.getAllByType<T>(type, false)[0]
+  getByType(type: string): Base {
+    const ret = this.getAllByType(type, false)[0]
     return ret
   }
 
@@ -222,18 +231,14 @@ export abstract class Base extends EventEmitter {
   /**
    * Get a reference to the object by its ID
    */
-  static get<T extends Base>(id: string): T {
+  static get<T extends Base>(id: BaseObjectID): T {
     return <T>objects.get(id)
   }
 
   /**
    * Maps an ID to object reference
-   *
-   * @static
-   * @param {any} element preferably string ID
-   * @returns {object}
    */
-  static toObject(element) {
+  static toObject(element: string | Base) {
     return typeof element === 'string' ? Base.get(element) : element
   }
 
@@ -258,3 +263,5 @@ nosync(Base.prototype, '_maxListeners')
 nosync(Base.prototype, 'domain')
 
 // nosync(Base.prototype, 'onUpdate')
+
+export type BaseObjectID = string

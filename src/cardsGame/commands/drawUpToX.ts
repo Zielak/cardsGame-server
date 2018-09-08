@@ -13,7 +13,7 @@ export default class DrawUpToX extends Command {
   execute(invoker, state: GameState) {
     return new Promise((resolve) => {
       const player = Player.get(
-        state.players.list.find(
+        state.players.find(
           player => player.clientId === invoker
         ).id
       )
