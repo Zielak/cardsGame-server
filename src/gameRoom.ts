@@ -13,6 +13,7 @@ interface IGameRoom {
 
 export class GameRoom extends colyseus.Room<GameState> implements IGameRoom {
 
+  name = 'Example Game'
   game: Game
   actions: ObjectWithCommands
 

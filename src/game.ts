@@ -5,7 +5,9 @@ import { Command } from './command'
 import { EventParser } from './eventParser'
 import { PlayerEvent } from './events/playerEvent'
 
-export type ObjectWithCommands = { [key: string]: Command }
+export interface ObjectWithCommands {
+  [key: string]: Command
+}
 
 export interface IGameOptions {
   actions: ObjectWithCommands

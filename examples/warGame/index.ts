@@ -1,15 +1,18 @@
 import {
   DefaultCommands, Command, Deck, Presets, GameState, GameRoom
-} from '../cardsGame/index'
+} from '../../src/cardsGame/index'
 
 import GameStartCommand from './actions/gameStart'
 import PlayCardCommand from './actions/playCard'
 import DrawUpToThree from './actions/drawUpToThree'
 import TestDeal from './actions/testDeal'
+import { ObjectWithCommands } from '../../src/game'
 
 export default class WarGame extends GameRoom {
 
-  setActions() {
+  name = 'WarGame'
+
+  setActions(): ObjectWithCommands {
     return {
       GameStart: new GameStartCommand(),
       PlayCard: new PlayCardCommand(),

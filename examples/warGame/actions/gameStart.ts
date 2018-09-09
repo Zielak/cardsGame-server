@@ -6,10 +6,10 @@ import {
   Hand,
   Player,
   GameState
-} from '../../cardsGame'
+} from '../../../src/cardsGame'
 import WarGame from '..'
 
-import canStartGame from '../../cardsGame/conditions/canStartGame'
+import canStartGame from '../../../src/cardsGame/conditions/canStartGame'
 
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')

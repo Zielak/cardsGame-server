@@ -1,5 +1,5 @@
-import { Command, BaseCard, GameState, Container } from '../../cardsGame'
-import isPlayersTurn from '../../cardsGame/conditions/isPlayersTurn'
+import { Command, BaseCard, GameState, Container } from '../../../src/cardsGame'
+import isPlayersTurn from '../../../src/cardsGame/conditions/isPlayersTurn'
 
 export default class PlayCardCommand extends Command {
 
