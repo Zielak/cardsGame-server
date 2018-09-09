@@ -1,4 +1,4 @@
-import { Command, Deck, GameState, Container } from '../../../src/cardsGame/index'
+import { Command, Deck, GameState, Container } from '../../../'
 
 export default class TestDealCommand extends Command {
 

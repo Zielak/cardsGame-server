@@ -7,7 +7,7 @@ import { GameRoom } from './gameRoom'
 
 require('./consoleColors')
 
-const CardsGame = (rooms: typeof GameRoom[]) => {
+export const Server = (rooms: typeof GameRoom[]): colyseus.Server => {
 
   const port = parseInt('' + process.env.PORT) || 2657
   const app = express()
@@ -34,6 +34,7 @@ const CardsGame = (rooms: typeof GameRoom[]) => {
 
   console.log(`Listening on http://localhost:${port}`)
 
+  return gameServer
 }
 
 export { Base } from './base'
@@ -59,8 +60,9 @@ export { _DefaultCommands as DefaultCommands }
 
 import isClientPlaying from './conditions/isClientPlaying'
 import isPlayersTurn from './conditions/isPlayersTurn'
+import canStartGame from './conditions/canStartGame'
 export const Conditions = {
-  isClientPlaying, isPlayersTurn
+  isClientPlaying, isPlayersTurn, canStartGame
 }
 
 export { Container } from './container'

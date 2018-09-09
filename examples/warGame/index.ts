@@ -1,6 +1,6 @@
 import {
-  DefaultCommands, Command, Deck, Presets, GameState, GameRoom
-} from '../../src/cardsGame/index'
+  DefaultCommands, Command, Deck, Presets, GameState, GameRoom, Server
+} from '../../'
 
 import GameStartCommand from './actions/gameStart'
 import PlayCardCommand from './actions/playCard'
@@ -41,3 +41,6 @@ export default class WarGame extends GameRoom {
   }
 
 }
+
+// This will init the server with one game type
+Server([WarGame])

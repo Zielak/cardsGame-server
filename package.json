@@ -2,10 +2,10 @@
   "name": "multiplayer-game",
   "version": "0.1.0",
   "description": "Server side of multiplayer cards game",
-  "main": "lib/index",
-  "types": "lib/index",
+  "main": "src/index",
+  "types": "src/index",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node examples/warGame/index.ts",
     "precommit": "npm run lint",
     "lint": "eslint ./ -f visualstudio",
     "test": "ts-node src/index.ts && ava",

@@ -1,4 +1,4 @@
-import { GameRoom, Command } from '../cardsGame'
+import { GameRoom } from '../../'
 
 import GameStart from './actions/gameStart'
 

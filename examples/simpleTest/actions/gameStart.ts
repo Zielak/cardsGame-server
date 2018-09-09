@@ -1,4 +1,4 @@
-import { Command, GameState, Player } from '../../cardsGame'
+import { Command, GameState, Player } from '../../../'
 
 export default class GameStartCommand extends Command {
 

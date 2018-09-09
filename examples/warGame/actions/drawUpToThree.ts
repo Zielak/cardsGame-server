@@ -1,12 +1,9 @@
-import { Conditions } from '../../../src/cardsGame'
-import { DefaultCommands } from '../../../src/cardsGame'
-import isPlayersTurn from '../../../src/cardsGame/conditions/isPlayersTurn'
-import isClientPlaying from '../../../src/cardsGame/conditions/isClientPlaying'
+import { Conditions, DefaultCommands } from '../../../'
 
 export default class DrawUpToThree extends DefaultCommands.DrawUpToXCommand {
 
   constructor() {
-    super({ maxCards: 3 }, [isPlayersTurn, isClientPlaying])
+    super({ maxCards: 3 }, [Conditions.isPlayersTurn, Conditions.isClientPlaying])
   }
 
 }

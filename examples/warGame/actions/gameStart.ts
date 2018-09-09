@@ -1,15 +1,5 @@
-import {
-  Command,
-  Container,
-  Deck,
-  Pile,
-  Hand,
-  Player,
-  GameState
-} from '../../../src/cardsGame'
+import { Command, Conditions, Container, Deck, Pile, Hand, Player, GameState } from '../../../'
 import WarGame from '..'
-
-import canStartGame from '../../../src/cardsGame/conditions/canStartGame'
 
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
@@ -22,11 +12,12 @@ export default class GameStartCommand extends Command {
     super({
       createdPlayers: [],
       createdContainers: []
-    }, [canStartGame])
+    }, [Conditions.canStartGame])
   }
 
   // TODO: move all that init to the gameroom itself.
   // FIXME: ^ really? why?
+  // TODO: It's 2018 and I still don't know. Investigate
   execute(invoker, state: GameState) {
     return new Promise((resolve/*, reject*/) => {
       // Gather players

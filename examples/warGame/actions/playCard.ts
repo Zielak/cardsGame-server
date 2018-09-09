@@ -1,5 +1,4 @@
-import { Command, BaseCard, GameState, Container } from '../../../src/cardsGame'
-import isPlayersTurn from '../../../src/cardsGame/conditions/isPlayersTurn'
+import { BaseCard, Command, Conditions, Container, GameState } from '../../../'
 
 export default class PlayCardCommand extends Command {
 
@@ -9,7 +8,7 @@ export default class PlayCardCommand extends Command {
   }
 
   constructor() {
-    super({ card: null, target: null }, [isPlayersTurn])
+    super({ card: null, target: null }, [Conditions.isPlayersTurn])
   }
 
   // TODO: finish and test me

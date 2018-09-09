@@ -15,14 +15,17 @@ export default class PrimitivesStateManager<T> {
     return arr
   }
 
+  get filter() {
+    return this._array.filter
+  }
   get find() {
     return this._array.find
   }
+  get forEach() {
+    return this._array.forEach
+  }
   get map() {
     return this._array.map
-  }
-  get filter() {
-    return this._array.filter
   }
   get some() {
     return this._array.some
