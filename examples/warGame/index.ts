@@ -6,21 +6,22 @@ import GameStartCommand from './actions/gameStart'
 import PlayCardCommand from './actions/playCard'
 import DrawUpToThree from './actions/drawUpToThree'
 import TestDeal from './actions/testDeal'
-import { ObjectWithCommands } from '../../src/game'
+import { CommandsSet } from '../../src/game'
+import { IGameRoom } from '../../src/gameRoom';
 
-export default class WarGame extends GameRoom {
+export default class WarGame extends GameRoom implements IGameRoom {
 
   name = 'WarGame'
 
-  setActions(): ObjectWithCommands {
-    return {
-      GameStart: new GameStartCommand(),
-      PlayCard: new PlayCardCommand(),
-      NextPlayer: new DefaultCommands.NextPlayer(),
-      PrevPlayer: new DefaultCommands.PreviousPlayer(),
-      DrawUpToThree: new DrawUpToThree(),
-      TestDeal: new TestDeal()
-    }
+  getCommands(): CommandsSet {
+    return new Set([
+      new GameStartCommand(),
+      new PlayCardCommand(),
+      new DefaultCommands.NextPlayer(),
+      new DefaultCommands.PreviousPlayer(),
+      new DrawUpToThree(),
+      new TestDeal()
+    ])
   }
 
   setupGame() {

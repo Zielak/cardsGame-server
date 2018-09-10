@@ -5,17 +5,15 @@ import { Command } from './command'
 import { EventParser } from './eventParser'
 import { PlayerEvent } from './events/playerEvent'
 
-export interface ObjectWithCommands {
-  [key: string]: Command
-}
+export type CommandsSet = Set<Command>
 
 export interface IGameOptions {
-  actions: ObjectWithCommands
+  actions: CommandsSet
 }
 
 export class Game extends EventEmitter {
 
-  actions: ObjectWithCommands
+  actions: CommandsSet
   commandManager: CommandManager
   eventParser: EventParser
 

@@ -4,6 +4,10 @@
   "description": "Server side of multiplayer cards game",
   "main": "src/index",
   "types": "src/index",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Zielak/cardsGame-server.git"
+  },
   "scripts": {
     "start": "ts-node examples/warGame/index.ts",
     "precommit": "npm run lint",

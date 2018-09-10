@@ -1,11 +1,11 @@
 import { toArray } from './utils'
 import { Command, ICommand } from './command'
 import { PlayerEvent } from './events/playerEvent'
-import { ObjectWithCommands } from './game'
+import { CommandsSet } from './game'
 
 export class EventParser {
 
-  constructor(private actions: ObjectWithCommands) {
+  constructor(private actions: CommandsSet) {
 
   }
 

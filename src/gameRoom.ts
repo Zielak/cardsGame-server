@@ -1,24 +1,23 @@
 import * as colyseus from 'colyseus'
 import { GameState } from './state'
 import { PlayerEvent } from './events/playerEvent'
-import { Game, ObjectWithCommands } from './game'
+import { Game, CommandsSet } from './game'
 
-interface IGameRoom {
+export interface IGameRoom {
   game: Game
-  actions: ObjectWithCommands
-
   setupGame(): void
-  setActions(): ObjectWithCommands
+  getCommands(): CommandsSet
 }
 
-export class GameRoom extends colyseus.Room<GameState> implements IGameRoom {
+export abstract class GameRoom extends colyseus.Room<GameState> {
 
   name = 'Example Game'
   game: Game
-  actions: ObjectWithCommands
 
   setupGame() { }
-  setActions(): ObjectWithCommands { return {} }
+  getCommands(): CommandsSet {
+    return new Set([])
+  }
 
   onInit(options) {
     this.setState(new GameState({
@@ -27,10 +26,9 @@ export class GameRoom extends colyseus.Room<GameState> implements IGameRoom {
       host: options.host,
     }))
 
-    this.actions = this.setActions()
     this.setupGame()
     this.game = new Game({
-      actions: this.actions
+      actions: this.getCommands()
     })
 
     console.log('WarGame room created!', options)
