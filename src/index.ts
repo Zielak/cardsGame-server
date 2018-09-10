@@ -20,6 +20,7 @@ export const Server = (rooms: typeof GameRoom[]): colyseus.Server => {
 
   // Register each room
   rooms.forEach((gameRoom) => {
+    console.info(`Registering game room named: ${gameRoom.name}`)
     gameServer.register(gameRoom.name, gameRoom).
       on('create', room => console.log('room created:', room.roomId)).
       on('dispose', room => console.log('room disposed:', room.roomId)).

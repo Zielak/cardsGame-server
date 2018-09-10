@@ -65,7 +65,7 @@ export class Game extends EventEmitter {
     }
 
     return new Promise((resolve, reject) => {
-      if (!state.clients || state.clients.size <= 0) {
+      if (!state.clients || state.count.clients() <= 0) {
         reject(`There are no clients.`)
       }
 

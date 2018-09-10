@@ -7,12 +7,19 @@ import PlayCardCommand from './actions/playCard'
 import DrawUpToThree from './actions/drawUpToThree'
 import TestDeal from './actions/testDeal'
 import { CommandsSet } from '../../src/game'
-import { IGameRoom } from '../../src/gameRoom';
+import { IGameRoom } from '../../src/gameRoom'
 
-export default class WarGame extends GameRoom implements IGameRoom {
+class WarGameState extends GameState {
+
+}
+
+export default class WarGame extends GameRoom<WarGameState> implements IGameRoom {
 
   name = 'WarGame'
 
+  getGameState(): typeof GameState {
+    return WarGameState
+  }
   getCommands(): CommandsSet {
     return new Set([
       new GameStartCommand(),
@@ -28,11 +35,11 @@ export default class WarGame extends GameRoom implements IGameRoom {
     const mainDeck = new Deck({
       x: 0, y: 0, name: WarGame.names.MainDeck
     })
-    this.state.containers.add(mainDeck)
+    this.state.containers[mainDeck.id] = mainDeck
 
     // Setup all cards
     Presets.classicCards().forEach(card => {
-      this.state.cards.add(card)
+      this.state.add.card(card)
       mainDeck.addChild(card)
     })
   }

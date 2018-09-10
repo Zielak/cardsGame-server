@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "ts-node examples/warGame/index.ts",
+    "dev": "nodemon -x ts-node examples/warGame/index.ts",
     "precommit": "npm run lint",
     "lint": "eslint ./ -f visualstudio",
     "test": "ts-node src/index.ts && ava",

@@ -6,21 +6,25 @@ import { Game, CommandsSet } from './game'
 export interface IGameRoom {
   game: Game
   setupGame(): void
+  getGameState(): typeof GameState
   getCommands(): CommandsSet
 }
 
-export abstract class GameRoom extends colyseus.Room<GameState> {
+export class GameRoom<T extends GameState> extends colyseus.Room<T> {
 
   name = 'Example Game'
   game: Game
 
   setupGame() { }
+  getGameState(): typeof GameState {
+    return GameState
+  }
   getCommands(): CommandsSet {
     return new Set([])
   }
 
   onInit(options) {
-    this.setState(new GameState({
+    this.setState(new (this.getGameState())({
       minClients: options.minClients || 1,
       maxClients: options.maxClients || 2,
       host: options.host,
@@ -44,14 +48,14 @@ export abstract class GameRoom extends colyseus.Room<GameState> {
 
   onJoin(client: colyseus.Client, options, auth) {
     console.log('JOINED: ', client.id)
-    this.state.clients.add(client.id)
+    this.state.add.client(client.id)
     if (!this.state.host) {
       this.state.host = client.id
     }
   }
 
   onLeave(client: colyseus.Client) {
-    this.state.clients.remove(client.id)
+    this.state.remove.client(client.id)
     // TODO: Handle leave when the game is running
     // Timeout => end game? Make player able to go back in?
   }
