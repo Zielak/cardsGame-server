@@ -1,15 +1,26 @@
 # multiplayer-game
 
-## dev
+## UNUSABLE yet
 
-Run the node server in one terminal:
+This is work in progress, most likely in unusable state right now.
 
-```npm start```
+---
 
-Run the webpack-dev-server for the client-side code in the other terminal:
+## Usage
 
-```npm run server```
+To setup your cards game you need to prepare first:
 
-Node server with WebSockets runs at `localhost:2657`
+1. Create your game class, which extends from `GameRoom`.
+2. Set `name = 'My Game'` in your class.
+3. Define how your game area is setup in `setupGame()` method - creating cards and containers goes here.
+4. Optionally, create your custom game state class, which extends from `GameState`. Default game state should probably be enough for your first game.
+5. Create and provide your `Command`s - stuff which players can do in-game.
+6. Create game server in your entry file:
 
-You want to open `localhost:8080` in the browser!
+```javascript
+import MyGame from './myGame'
+import { CreateGameServer } from 'cardsGame-server'
+
+// This will init the server with one game type
+CreateGameServer([MyGame])
+```

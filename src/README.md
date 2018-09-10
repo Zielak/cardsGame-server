@@ -7,12 +7,17 @@ TODO: document this API
 - `ACTION_COMPLETED(actionName, status)`
 - `ACTION_FAILED(actionName, status)`
 
+# Conditions
+
+# Commands
 
 # Elements
 
 ### Sizes
 
-All cards and containers should have a defined real-like dimensions. Classic playing cards are about 5,6 cm x 8,7 cm (at least here in Europe). 
+// TODO: move this note to client-side codebase
+
+All cards and containers should have a defined real-like dimensions. Classic playing cards are about 5,6 cm x 8,7 cm (at least here in Europe).
 
 There are 2 units of dimensions now:
 
@@ -39,7 +44,7 @@ Neatly packed cards on top of eachother. Same x/y positions.
 
 ### `hand`
 
-Cards that you hold in your own hand, and nobody can see them. They're ought to 
+Cards that you hold in your own hand, and nobody can see them. They're ought to
 be rendered in "spread", just like you would hold cards in your hand.
 
 ### `pile`
@@ -51,7 +56,7 @@ Each new card will get randomized offset and rotation.
 
 Cards placed in one row, one next to the other.
 This container has specified width, and cards will never overflow this container.
-User should be able to peek and see all cards in here (unless they're face-down). 
+User should be able to peek and see all cards in here (unless they're face-down).
 
 ### `spread`
 
