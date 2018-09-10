@@ -1,5 +1,5 @@
 import * as colyseus from 'colyseus'
-import { GameState } from './state'
+import { GameState } from './gameState'
 import { PlayerEvent } from './events/playerEvent'
 import { Game, CommandsSet } from './game'
 

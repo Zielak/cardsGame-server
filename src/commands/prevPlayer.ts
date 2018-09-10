@@ -1,18 +1,18 @@
 import { Command } from '../command'
-import { GameState } from '../state'
+import { GameState } from '../gameState'
 
 export default class PreviousPlayer extends Command {
 
   execute(invoker: string, state: GameState) {
     return new Promise(resolve => {
-      state.players.prev()
+      state.previousPlayer()
       resolve()
     })
   }
 
   undo(state: GameState) {
     return new Promise(resolve => {
-      state.players.next()
+      state.nextPlayer()
       resolve()
     })
   }

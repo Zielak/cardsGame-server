@@ -1,7 +1,7 @@
 import { Command } from '../command'
 import { Deck } from '../containers/deck'
 import { Player } from '../player'
-import { GameState } from '../state'
+import { GameState } from '../gameState'
 import { Hand } from '../containers/hand'
 
 export default class DrawUpToX extends Command {

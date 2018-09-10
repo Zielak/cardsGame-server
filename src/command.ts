@@ -1,5 +1,5 @@
 import Condition from './conditions/condition'
-import { GameState } from './state'
+import { GameState } from './gameState'
 
 type IExecutable = Promise<string | {}>
 

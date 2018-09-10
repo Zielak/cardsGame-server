@@ -2,7 +2,7 @@
 
 import { Command } from '../command'
 import { Container } from '../container'
-import { GameState } from '../state'
+import { GameState } from '../gameState'
 import Condition from '../conditions/condition'
 const containerClasses = {
   'container': require('../container'),

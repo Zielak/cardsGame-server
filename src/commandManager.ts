@@ -1,5 +1,5 @@
 import { Command, ICommand } from './command'
-import { GameState } from './state';
+import { GameState } from './gameState'
 
 export default class CommandManager {
 

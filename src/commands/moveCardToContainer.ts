@@ -1,7 +1,7 @@
 import { Command } from '../command'
 import { Container } from '../container'
 import { BaseCard } from '../baseCard'
-import { GameState } from '../state'
+import { GameState } from '../gameState'
 
 export default class MoveCardToContainer extends Command {
 

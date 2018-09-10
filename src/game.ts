@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3'
 import CommandManager from './commandManager'
-import { GameState } from './state'
+import { GameState } from './gameState'
 import { Command } from './command'
 import { EventParser } from './eventParser'
 import { PlayerEvent } from './events/playerEvent'

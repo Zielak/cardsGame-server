@@ -74,7 +74,7 @@ export { Row } from './containers/row'
 export { Spread } from './containers/spread'
 
 export { Game } from './game'
-export { GameState } from './state'
+export { GameState } from './gameState'
 export { GameRoom } from './gameRoom'
 export { Player } from './player'
 import * as Presets from './presets'
