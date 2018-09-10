@@ -7,7 +7,7 @@ import { GameRoom } from './gameRoom'
 
 require('./consoleColors')
 
-export const Server = (rooms: typeof GameRoom[]): colyseus.Server => {
+export const CreateGameServer = (rooms: typeof GameRoom[]): colyseus.Server => {
 
   const port = parseInt('' + process.env.PORT) || 2657
   const app = express()

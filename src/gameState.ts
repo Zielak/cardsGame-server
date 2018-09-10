@@ -1,8 +1,9 @@
-import { EntityMap, nosync } from 'colyseus'
+import { nosync } from 'colyseus'
 import { Container } from './container'
 import { Base } from './base'
 import { BaseCard } from './baseCard'
 import { Player } from './player'
+import { EntityMap, PrimitiveMap } from './entityMap'
 
 export class GameState {
 
@@ -10,16 +11,16 @@ export class GameState {
   minClients: number
   maxClients: number
 
-  clients: EntityMap<string> = {}
+  clients = new PrimitiveMap<string>()
   // Clients who are currently playing the game
-  players: EntityMap<Player> = {}
+  players = new EntityMap<Player>()
 
   @nosync
   playersOrder: Array<string> = []
 
-  cards: EntityMap<BaseCard> = {}
-  elements: EntityMap<Base> = {}
-  containers: EntityMap<Container> = {}
+  cards = new EntityMap<BaseCard>()
+  elements = new EntityMap<Base>()
+  containers = new EntityMap<Container>()
 
   // Has the game started?
   private started = false
@@ -33,37 +34,6 @@ export class GameState {
     this.minClients = minClients
     this.maxClients = maxClients
     this.host = host
-  }
-
-  // TODO: I'm loosing flexibility here. What about .some, .map etc?
-  // What about states extending this one, which add more EntityMaps?
-  get add() {
-    return {
-      client: (el: string) => this['clients'][el] = el,
-      player: (el: Player) => this['players'][el.id] = el,
-      card: (el: BaseCard) => this['cards'][el.id] = el,
-      element: (el: Base) => this['elements'][el.id] = el,
-      container: (el: Container) => this['containers'][el.id] = el,
-    }
-  }
-  get remove() {
-    return {
-      client: (id: string) => delete this['clients'][id],
-      player: (id: string) => delete this['players'][id],
-      card: (id: string) => delete this['cards'][id],
-      element: (id: string) => delete this['elements'][id],
-      container: (id: string) => delete this['containers'][id],
-    }
-  }
-  get count() {
-    const _count = (what: string) => Object.getOwnPropertyNames(this[what]).length
-    return {
-      clients: () => _count('clients'),
-      players: () => _count('players'),
-      cards: () => _count('cards'),
-      elements: () => _count('elements'),
-      containers: () => _count('containers'),
-    }
   }
 
   gameStart() {

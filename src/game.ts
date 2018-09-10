@@ -49,7 +49,7 @@ export class Game extends EventEmitter {
    * @param {object} state
    * @returns {Promise}
    */
-  performAction(client, data: PlayerEvent, state: GameState) {
+  performAction<T extends GameState>(client, data: PlayerEvent, state: T) {
     if (client === null || typeof client !== 'object') {
       client = Game.id
     }
@@ -65,7 +65,7 @@ export class Game extends EventEmitter {
     }
 
     return new Promise((resolve, reject) => {
-      if (!state.clients || state.count.clients() <= 0) {
+      if (!state.clients || state.clients.length <= 0) {
         reject(`There are no clients.`)
       }
 

@@ -1,5 +1,5 @@
 import {
-  DefaultCommands, Command, Deck, Presets, GameState, GameRoom, Server
+  DefaultCommands, Command, Deck, Presets, GameState, GameRoom
 } from '../../'
 
 import GameStartCommand from './actions/gameStart'
@@ -13,7 +13,7 @@ class WarGameState extends GameState {
 
 }
 
-export default class WarGame extends GameRoom<WarGameState> implements IGameRoom {
+export default class WarGame<T extends WarGameState> extends GameRoom<T> implements IGameRoom {
 
   name = 'WarGame'
 
@@ -35,11 +35,11 @@ export default class WarGame extends GameRoom<WarGameState> implements IGameRoom
     const mainDeck = new Deck({
       x: 0, y: 0, name: WarGame.names.MainDeck
     })
-    this.state.containers[mainDeck.id] = mainDeck
+    this.state.containers.add(mainDeck)
 
     // Setup all cards
     Presets.classicCards().forEach(card => {
-      this.state.add.card(card)
+      this.state.cards.add(card)
       mainDeck.addChild(card)
     })
   }
@@ -49,6 +49,3 @@ export default class WarGame extends GameRoom<WarGameState> implements IGameRoom
   }
 
 }
-
-// This will init the server with one game type
-Server([WarGame])

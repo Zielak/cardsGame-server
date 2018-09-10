@@ -48,14 +48,14 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> {
 
   onJoin(client: colyseus.Client, options, auth) {
     console.log('JOINED: ', client.id)
-    this.state.add.client(client.id)
+    this.state.clients.add(client.id)
     if (!this.state.host) {
       this.state.host = client.id
     }
   }
 
   onLeave(client: colyseus.Client) {
-    this.state.remove.client(client.id)
+    this.state.clients.remove(client.id)
     // TODO: Handle leave when the game is running
     // Timeout => end game? Make player able to go back in?
   }
