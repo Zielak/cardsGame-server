@@ -17,6 +17,10 @@ export class EntityMap<T extends Base> {
   get length(): number {
     return Object.getOwnPropertyNames(this).length
   }
+  /**
+   * List may not be in order.
+   * Remember to sort Base elements by their `order` value
+   */
   @nosync
   get list(): T[] {
     return Object.getOwnPropertyNames(this).map(key => this[key])
@@ -38,6 +42,10 @@ export class PrimitiveMap<T extends string | number> {
   get length(): number {
     return Object.getOwnPropertyNames(this).length
   }
+  /**
+   * List may not be in order.
+   * Remember to sort Base elements by their `order` value
+   */
   @nosync
   get list(): T[] {
     return Object.getOwnPropertyNames(this).map(key => this[key])

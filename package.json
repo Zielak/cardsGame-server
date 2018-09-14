@@ -13,48 +13,30 @@
     "dev": "nodemon -x ts-node examples/warGame/index.ts",
     "precommit": "npm run lint",
     "lint": "eslint ./ -f visualstudio",
-    "test": "ts-node src/index.ts && ava",
-    "test:cover": "ts-node src/index.ts && nyc ava",
-    "test:watch": "ts-node src/index.ts && ava --watch"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "colyseus": "^0.9.15",
-    "cross-env": "^5.1.6",
     "express": "^4.16.3",
     "serve-index": "^1.9.1",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.2",
     "ava": "^0.25.0",
     "eventemitter3": "^3.1.0",
     "husky": "^0.14.3",
+    "jest": "^23.6.0",
     "nodemon": "^1.17.5",
     "nyc": "^13.0.1",
     "sinon": "^6.2.0",
+    "ts-jest": "^23.1.4",
     "ts-node": "^7.0.1",
     "tslint": "^5.10.0",
     "typescript": "^3.0.3"
-  },
-  "ava": {
-    "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
-  },
-  "nyc": {
-    "include": [
-      "app/*",
-      "client/*",
-      "shared/*"
-    ],
-    "all": true,
-    "reporter": [
-      "html",
-      "text-summary"
-    ],
-    "sourceMap": true,
-    "report-dir": "./dist/coverage"
   }
 }

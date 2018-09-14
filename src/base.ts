@@ -22,6 +22,7 @@ export abstract class Base extends EventEmitter {
   id: BaseObjectID
   type: string
   name: string
+  order: number = -1
   parentId: string | null
 
   width: number
@@ -34,7 +35,7 @@ export abstract class Base extends EventEmitter {
   onUpdate: Function
 
 
-  constructor(options: IBaseOptions) {
+  constructor(options: IBaseOptions = {}) {
     super()
     this.id = uuid()
 
@@ -86,15 +87,23 @@ export abstract class Base extends EventEmitter {
   /**
    * Gives you the topmost element in this container
    */
-  top() {
-    return Base.get(this.children[this.children.length - 1])
+  get top() {
+    return Base.get(
+      this.children.list.map(Base.get).reduce((prev, current) => {
+        return prev.order > current.order ? prev : current
+      }).id
+    )
   }
 
   /**
    * Gives you an element from the bottom
    */
-  bottom() {
-    return Base.get(this.children[0])
+  get bottom() {
+    return Base.get(
+      this.children.list.map(Base.get).reduce((prev, current) => {
+        return prev.order < current.order ? prev : current
+      }).id
+    )
   }
 
   /**
@@ -122,7 +131,7 @@ export abstract class Base extends EventEmitter {
    *
    * @param {any|string} element reference to an object or its ID
    */
-  addChild(element) {
+  addChild(element: Base | string, order?: number) {
     const child: Base = typeof element === 'string' ? Base.get(element) : element
 
     // Notify element's last parent of change
@@ -135,8 +144,12 @@ export abstract class Base extends EventEmitter {
     // Change child's parent element
     child.parentId = this.id
 
+    // Make new item get on top of the stack
+    child.order = typeof order === 'number' ? order : this.children.length
+
     // Add to this list
-    this.children.push(child.id)
+    this.children.add(child.id)
+    this.keepChildrensOrder()
     child.onUpdate(child)
     this.onUpdate(this)
     return this
@@ -156,20 +169,34 @@ export abstract class Base extends EventEmitter {
     }
 
     // Confirm it's my child
-    if (!this.children.some(id => id === child.id)) {
+    if (!this.children.list.some(id => id === child.id)) {
       return this
     }
 
     // Nullify its parent
     child.parentId = null
 
-    this.children = this.children.filter(id => id !== child.id)
+    this.children.remove(child.id)
+    this.keepChildrensOrder()
     this.onUpdate(this)
     child.onUpdate(child)
     return this
   }
 
-  filterByName(/*name*/) { }
+  /**
+   * March through all the children and keep them in order
+   * 0, 1, 2, 3 ... n
+   * There should be no gaps,
+   * There should be no duplicates
+   */
+  keepChildrensOrder() {
+    const children = this.children.list.map(Base.get).sort((a, b) => a.order - b.order)
+    children.forEach((el, idx) => {
+      if (el.order !== idx) {
+        el.order = idx
+      }
+    })
+  }
 
   /**
    * Get every child of a certain type
@@ -180,7 +207,7 @@ export abstract class Base extends EventEmitter {
    */
   getAllByType(type: string, deep = true): Base[] {
     const nested: Base[] = []
-    const found = this.children
+    const found = this.children.list
       .map(Base.toObject)
       .filter(el => {
         if (deep && el.children.length > 1) {
@@ -235,9 +262,7 @@ export abstract class Base extends EventEmitter {
   }
 
   /**
-   * Only for testing. Do not use while playing
-   *
-   * @static
+   * Only for unit testing. Do not use while playing.
    */
   static _clear() {
     objects.clear()
