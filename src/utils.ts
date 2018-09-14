@@ -14,7 +14,7 @@ export const limit = (val, min = 0, max = 1) => val < min ? min : val > max ? ma
 /**
  * Returns `def` if the `value` really is undefined
  */
-export const def = (value, def) => typeof value !== 'undefined' ? value : def
+export const def = <T>(value: T, def: T): T => typeof value !== 'undefined' ? value : def
 
 /**
  * Check if the value exists

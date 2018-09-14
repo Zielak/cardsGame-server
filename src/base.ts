@@ -2,6 +2,7 @@ import uuid from 'uuid/v4'
 import { def, noop } from './utils'
 import { EventEmitter } from 'eventemitter3'
 import { nosync } from 'colyseus'
+import { PrimitiveMap } from './entityMap'
 
 const objects = new Map<string, Base>()
 
@@ -19,14 +20,15 @@ export interface IBaseOptions {
 export abstract class Base extends EventEmitter {
 
   id: BaseObjectID
-  type: string | undefined
-  name: string | undefined
+  type: string
+  name: string
   parentId: string | null
 
   width: number
   height: number
 
-  children: Array<BaseObjectID>
+  // List of children's IDs
+  children = new PrimitiveMap<BaseObjectID>()
 
   @nosync
   onUpdate: Function
@@ -39,26 +41,16 @@ export abstract class Base extends EventEmitter {
     // Store a reference to itself by ID
     objects.set(this.id, this)
 
-    this.type = def(options.type, undefined)
-    this.name = def(options.name, undefined)
+    this.type = def(options.type, Base.TYPE_NAME)
+    this.name = def(options.name, 'BaseObject')
 
-    // DEPRECATE: unused in client code.
     // Real-life size (in CM) and position
-    // this._local = {
-    //   x: def(options.x, 0),
-    //   y: def(options.y, 0),
-    //   angle: def(options.angle, 0),
-    // }
     this.width = def(options.width, 5)
     this.height = def(options.height, 5)
-
-    // List of children ID's
-    this.children = []
 
     this.onUpdate = def(options.onUpdate, noop)
 
     // ParentID, no object reference
-    // console.info('typeof options.parentId === '+typeof options.parentId)
     this.parentId = typeof options.parentId === 'string' ? options.parentId : null
 
     // Add myself to my new parent element
@@ -254,6 +246,8 @@ export abstract class Base extends EventEmitter {
   static events = {
     TEST: 'test'
   }
+
+  static TYPE_NAME = 'base'
 }
 
 // Get rid of EventEmitter stuff from the client
