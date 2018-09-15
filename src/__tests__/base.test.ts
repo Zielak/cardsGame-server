@@ -107,7 +107,7 @@ describe('complex tests', () => {
       parentId: parent.id,
     })
     expect(parent.children.length).toBe(1)
-    expect(parent.top).toBe(child.id)
+    expect(parent.top.id).toBe(child.id)
   })
 
   test('getAllByType', () => {
@@ -169,7 +169,7 @@ describe('addChild', () => {
     const newThing = new BaseClass()
     context.veggieBag.addChild(newThing)
 
-    expect(context.veggieBag.top).toEqual(newThing.id)
+    expect(context.veggieBag.top.id).toEqual(newThing.id)
   })
   test('order, adding somewhere in the middle', () => {
     const child = new BaseClass()
@@ -183,7 +183,7 @@ describe('addChild', () => {
     context.things.addChild(child, Infinity)
 
     expect(child.order).toBe(context.things.children.length - 1)
-    expect(context.things.top).toBe(child.id)
+    expect(context.things.top.id).toBe(child.id)
   })
 
 })

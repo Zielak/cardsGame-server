@@ -98,21 +98,21 @@ export abstract class Base extends EventEmitter {
   }
 
   /**
-   * Gives you the topmost element in this container
+   * Gives you the topmost ELEMENT in this container
    */
   get top() {
     return this.children.reduce((prev, current) =>
       prev.order > current.order ? prev : current
-    ).id
+    )
   }
 
   /**
-   * Gives you an element from the bottom
+   * Gives you an ELEMENT from the bottom
    */
   get bottom() {
     return this.children.reduce((prev, current) =>
       prev.order < current.order ? prev : current
-    ).id
+    )
   }
 
   /**
