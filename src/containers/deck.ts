@@ -29,7 +29,7 @@ export class Deck extends Container {
     const maxDeals = count * targetContainers.length
 
     const dealOne = () => {
-      const card = this.top() as BaseCard
+      const card = this.top as BaseCard
       if (!card) {
         this.onCardsDealt()
         return
