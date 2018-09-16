@@ -44,6 +44,20 @@ export class GameState {
     return this.started
   }
 
+  addClient(clientId: string) {
+    this.clients.add(clientId)
+  }
+
+  removeClient(clientId: string) {
+    this.clients.remove(clientId)
+  }
+
+  getPlayerByClientId(clientId: string): Player {
+    return this.players.list.find(player => {
+      return player.clientId === clientId
+    })
+  }
+
   addPlayer(player: Player) {
     this.players[player.id] = player
     this.playersOrder.push(player.id)

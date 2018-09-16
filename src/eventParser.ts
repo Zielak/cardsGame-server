@@ -1,20 +1,20 @@
 import { toArray } from './utils'
 import { Command, ICommand } from './command'
 import { PlayerEvent } from './events/playerEvent'
-import { CommandsSet } from './game'
+import { CommandsMap } from './game'
 
 export class EventParser {
 
-  constructor(private actions: CommandsSet) {
+  constructor(private actions: CommandsMap) {
 
   }
 
-  getAction(data: PlayerEvent) {
+  getAction(data: PlayerEvent): Command | undefined {
     // Get action object, if its simple action or user interaction?
     // const action = data.action ?
     //   this.actions.get(data.action) :
     //   this.mapEventToIntention(data)
-    const action = this.actions[data.action]
+    const action = this.actions.get(data.action)
     return action
   }
 

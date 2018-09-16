@@ -11,19 +11,19 @@ export default class CommandManager {
     this.lastCommand = null
   }
 
-  execute(command: Command, invoker, context: any, state: GameState): Promise<any> {
+  execute(command: Command, invoker: string, state: GameState, data: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.isExecutable(command, invoker, context, state).then(() => {
+      this.isExecutable(command, invoker, data, state).then(() => {
         this.commands.push(command)
         this.lastCommand = command
-        command.execute(invoker, state).then(resolve).catch(reject)
+        command.execute(invoker, state, data).then(resolve).catch(reject)
       }).catch(reject)
     })
   }
 
-  private isExecutable(command: Command, invoker, context: any, state: GameState): Promise<any> {
+  private isExecutable(command: Command, invoker, data: any, state: GameState): Promise<any> {
     const promises = command.conditions.map(condition => {
-      return condition(invoker, state, context)
+      return condition(invoker, state, data)
     })
     return Promise.all(promises)
   }

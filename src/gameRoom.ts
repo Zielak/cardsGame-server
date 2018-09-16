@@ -1,13 +1,13 @@
 import * as colyseus from 'colyseus'
 import { GameState } from './gameState'
 import { PlayerEvent } from './events/playerEvent'
-import { Game, CommandsSet } from './game'
+import { Game, CommandsMap } from './game'
 
 export interface IGameRoom {
   game: Game
   setupGame(): void
   getGameState(): typeof GameState
-  getCommands(): CommandsSet
+  getCommands(): CommandsMap
 }
 
 export class GameRoom<T extends GameState> extends colyseus.Room<T> {
@@ -19,8 +19,8 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> {
   getGameState(): typeof GameState {
     return GameState
   }
-  getCommands(): CommandsSet {
-    return new Set([])
+  getCommands(): CommandsMap {
+    return new Map([])
   }
 
   onInit(options) {
@@ -48,21 +48,25 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> {
 
   onJoin(client: colyseus.Client, options, auth) {
     console.log('JOINED: ', client.id)
-    this.state.clients.add(client.id)
+    this.state.addClient(client.id)
     if (!this.state.host) {
       this.state.host = client.id
     }
   }
 
   onLeave(client: colyseus.Client) {
-    this.state.clients.remove(client.id)
+    this.state.removeClient(client.id)
     // TODO: Handle leave when the game is running
     // Timeout => end game? Make player able to go back in?
   }
 
   onMessage(client: colyseus.Client, data: PlayerEvent) {
     console.log('MSG: ', JSON.stringify(data))
-    this.game.performAction(client, data, this.state)
+
+    // TODO: Handle "StartGame" as - let all agree to start the game
+    // if(data.action)
+
+    this.game.performAction(client, this.state, data)
       .then(status => {
         console.log('action resolved!', status)
       })
@@ -72,11 +76,9 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> {
           data: `Client "${client.id}" failed to perform "${data.action}" action.
           Details: ${status}`
         })
+        console.warn(`Client "${client.id}" failed to perform "${data.action}" action.
+        Details: ${status}`)
       })
-  }
-
-  onGameStart() {
-
   }
 
   onDispose() {

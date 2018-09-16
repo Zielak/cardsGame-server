@@ -1,3 +1,4 @@
+import * as colyseus from 'colyseus'
 import { EventEmitter } from 'eventemitter3'
 import CommandManager from './commandManager'
 import { GameState } from './gameState'
@@ -5,15 +6,15 @@ import { Command } from './command'
 import { EventParser } from './eventParser'
 import { PlayerEvent } from './events/playerEvent'
 
-export type CommandsSet = Set<Command>
+export type CommandsMap = Map<string, Command>
 
 export interface IGameOptions {
-  actions: CommandsSet
+  actions: CommandsMap
 }
 
 export class Game extends EventEmitter {
 
-  actions: CommandsSet
+  actions: CommandsMap
   commandManager: CommandManager
   eventParser: EventParser
 
@@ -49,35 +50,33 @@ export class Game extends EventEmitter {
    * @param {object} state
    * @returns {Promise}
    */
-  performAction<T extends GameState>(client, data: PlayerEvent, state: T) {
-    if (client === null || typeof client !== 'object') {
-      client = Game.id
-    }
-
-    const command = this.eventParser.getAction(data)
-
-    const actionName = data.action // TODO: OR????
-
-    console.info(`-= performAction("${client.id}",`, data, `)`)
-    if (!data.action) {
-      console.info(`   User Event:`, data)
-      // console.info(`   Found intentions: ${action.length}`)
-    }
-
+  performAction<T extends GameState>(client: colyseus.Client, state: T, data: PlayerEvent) {
     return new Promise((resolve, reject) => {
+      const command = this.eventParser.getAction(data)
+      const actionName = data.action // TODO: OR????
+
+      if (command === undefined || typeof command === 'undefined') {
+        reject(`Unknown action.`)
+        return
+      }
+
+      console.info(`-= performAction: client: "${client.id}", action: ${data.action}`)
+      if (!actionName) {
+        console.info(`   User Event:`, data)
+        // console.info(`   Found intentions: ${action.length}`)
+      }
+
       if (!state.clients || state.clients.length <= 0) {
         reject(`There are no clients.`)
+        return
       }
 
-      if (state.clients.some(client)) {
-        reject(`This client doesn't exist "${client}".`)
+      if (!state.clients.list.some(el => el === client.id)) {
+        reject(`This client doesn't exist "${client.id}".`)
+        return
       }
 
-      if (command === undefined) {
-        reject(`Unknown action.`)
-      }
-
-      this.commandManager.execute(command, client.id, data, state)
+      this.commandManager.execute(command, client.id, state, data.data)
         .then(this.actionCompleted(resolve, actionName))
         .catch(this.actionFailed(reject, actionName))
     })

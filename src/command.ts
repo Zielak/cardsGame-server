@@ -14,7 +14,9 @@ export interface IComandConstructor {
 
 export abstract class Command implements ICommand {
 
-  constructor(public context: any = {}, public conditions: Condition[] = []) {
+  context = {}
+
+  constructor(public conditions: Condition[] = []) {
     this.prepareContext()
   }
 
@@ -24,7 +26,7 @@ export abstract class Command implements ICommand {
    */
   protected prepareContext() { }
 
-  abstract execute(invoker: string, state: GameState): IExecutable
+  abstract execute(invoker: string, state: GameState, data: any): IExecutable
   abstract undo(state: GameState): IExecutable
 
 }

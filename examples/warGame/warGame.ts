@@ -6,7 +6,7 @@ import GameStartCommand from './actions/gameStart'
 import PlayCardCommand from './actions/playCard'
 import DrawUpToThree from './actions/drawUpToThree'
 import TestDeal from './actions/testDeal'
-import { CommandsSet } from '../../src/game'
+import { CommandsMap } from '../../src/game'
 import { IGameRoom } from '../../src/gameRoom'
 
 class WarGameState extends GameState {
@@ -20,14 +20,14 @@ export default class WarGame<T extends WarGameState> extends GameRoom<T> impleme
   getGameState(): typeof GameState {
     return WarGameState
   }
-  getCommands(): CommandsSet {
-    return new Set([
-      new GameStartCommand(),
-      new PlayCardCommand(),
-      new DefaultCommands.NextPlayer(),
-      new DefaultCommands.PreviousPlayer(),
-      new DrawUpToThree(),
-      new TestDeal()
+  getCommands(): CommandsMap {
+    return new Map([
+      ['GameStart', new GameStartCommand()],
+      ['PlayCard', new PlayCardCommand()],
+      ['NextPlayer', new DefaultCommands.NextPlayer()],
+      ['PreviousPlayer', new DefaultCommands.PreviousPlayer()],
+      ['DrawUpToThree', new DrawUpToThree()],
+      ['TestDeal', new TestDeal()]
     ])
   }
 

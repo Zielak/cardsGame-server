@@ -9,7 +9,7 @@
       "type": "node",
       "request": "launch",
       "args": [
-        "${workspaceFolder}/src/index.ts"
+        "${workspaceFolder}/examples/simpleTest/index.ts"
       ],
       "runtimeArgs": [
         "-r",
