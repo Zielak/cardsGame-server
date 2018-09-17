@@ -14,6 +14,18 @@ export class EntityMap<T extends Base> {
     return delete this[el.id]
   }
   @nosync
+  getByType(type: string): T[] {
+    return this.list.filter(el => el.type === type)
+  }
+  /**
+   * Name ought to be uniqe. This will return only one element
+   * @param name
+   */
+  @nosync
+  getByName(name: string): T {
+    return this.list.find(el => el.name === name)
+  }
+  @nosync
   get length(): number {
     return Object.getOwnPropertyNames(this).length
   }

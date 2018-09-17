@@ -58,16 +58,6 @@ export class GameState {
     })
   }
 
-  addPlayer(player: Player) {
-    this.players[player.id] = player
-    this.playersOrder.push(player.id)
-  }
-
-  removePlayer(playerId: string) {
-    delete this.players.playerId
-    this.playersOrder = this.playersOrder.filter(id => id !== playerId)
-  }
-
   nextPlayer(): Player {
     let currIdx = this._currentPlayerIdx
     if (!this._playerOrderReversed) {

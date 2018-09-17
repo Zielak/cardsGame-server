@@ -60,13 +60,11 @@ export class Pile extends Container {
     this.cardsData = []
   }
 
-  // FIXME: listen for self addChild events?
   addChild(element) {
     this.cardsData.push(cardsDataFactory(element, this.limits))
     return super.addChild(element)
   }
 
-  // FIXME: listen for self removeChild events? plz
   removeChild(element) {
     const idx = this.children.indexOf(element)
     this.cardsData.splice(idx, 1)

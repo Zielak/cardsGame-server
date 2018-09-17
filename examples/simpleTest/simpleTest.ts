@@ -1,7 +1,8 @@
-import { Conditions, GameRoom, GameState, Deck, Presets, Pile } from '../../'
+import { Conditions, GameRoom, GameState, Deck, Presets, Pile, Player, Hand } from '../../'
 import { IGameRoom } from '../../src/gameRoom'
 
 import PlayCardCommand from './actions/playCard'
+import { randomName } from '../../src/utils';
 
 export class SimpleTest<T extends GameState> extends GameRoom<T> implements IGameRoom {
 
@@ -16,9 +17,10 @@ export class SimpleTest<T extends GameState> extends GameRoom<T> implements IGam
     }),
   ])
 
-  setupGame() {
+  onSetupGame() {
     const deck = new Deck({
-      name: 'deck'
+      name: 'deck',
+      x: -150
     })
     this.state.containers.add(deck)
     Presets.classicCards().forEach(card => {
@@ -26,13 +28,32 @@ export class SimpleTest<T extends GameState> extends GameRoom<T> implements IGam
       this.state.cards.add(card)
     })
 
-    /*const pile = */new Pile({
+    new Pile({
       name: 'pile'
     })
   }
 
-  startGame() {
-    // super()
+  onStartGame() {
+    const hands: Hand[] = []
+    for (let clientId in this.state.clients) {
+      const player = new Player({
+        clientId,
+        name: randomName()
+      })
+
+      const hand = new Hand({
+        parent: player,
+        name: 'hand'
+      })
+      hands.push(hand)
+
+      this.state.players.add(player)
+      this.state.containers.add(hand)
+    }
+    const deck = this.state.containers.getByName('deck') as Deck
+    deck.deal(hands)
+
+    console.log(`  starting game with ${this.state.players.length} players`)
   }
 
 }

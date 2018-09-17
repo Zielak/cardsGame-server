@@ -74,7 +74,6 @@ export { Pile } from './containers/pile'
 export { Row } from './containers/row'
 export { Spread } from './containers/spread'
 
-export { Game } from './game'
 export { GameState } from './gameState'
 export { GameRoom } from './gameRoom'
 export { Player } from './player'

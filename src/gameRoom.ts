@@ -1,30 +1,42 @@
 import * as colyseus from 'colyseus'
 import { GameState } from './gameState'
 import { PlayerEvent } from './events/playerEvent'
-import { Game, CommandsSet } from './game'
+import { CommandManager } from './commandManager'
+import { EventParser } from './eventParser'
+import { Command } from './command'
+
+export type CommandsSet = Set<Command>
 
 export interface IGameRoom {
-  game: Game
   possibleActions: CommandsSet
-  setupGame(): void
   getGameState(): typeof GameState
+  onSetupGame(): void
+  onStartGame(): void
 }
 
 export class GameRoom<T extends GameState> extends colyseus.Room<T> implements IGameRoom {
 
   name = 'Example Game'
-  game: Game
+
+  commandManager: CommandManager
+  eventParser: EventParser
 
   /**
    * List of all possible commands to execute by players
    */
   possibleActions: CommandsSet
 
-  setupGame() { }
+  onSetupGame() { }
+  onStartGame() { }
+
+  startGame() {
+    this.state.gameStart()
+    this.onStartGame()
+  }
+
   getGameState(): typeof GameState {
     return GameState
   }
-
 
   onInit(options) {
     this.setState(new (this.getGameState())({
@@ -33,10 +45,10 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
       host: options.host,
     }))
 
-    this.setupGame()
-    this.game = new Game({
-      actions: this.possibleActions
-    })
+    this.onSetupGame()
+
+    this.commandManager = new CommandManager()
+    this.eventParser = new EventParser(this.possibleActions)
 
     console.log('WarGame room created!', options)
   }
@@ -72,9 +84,12 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
     }
 
     // TODO: Handle "StartGame" as - let all agree to start the game
-    // if(data.action)
+    if (event.data === 'start' && !this.state.hasStarted) {
+      this.startGame()
+      return
+    }
 
-    this.game.performAction(client, this.state, event)
+    this.performAction(client, event)
       .then(status => {
         console.log(`action resolved! ${status ? status : ''}`)
       })
@@ -87,6 +102,33 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
         console.warn(`Client "${client.id}" failed to perform action.
         Details: ${status}`)
       })
+  }
+
+  /**
+   * Check conditions and perform given action
+   *
+   * @param client object, with id and stuff. Otherwise will act as the "game" itself issues this command
+   * @param event
+   */
+  performAction<T extends GameState>(client: colyseus.Client, event: PlayerEvent): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const commands = this.eventParser.getCommandsByInteraction(event)
+
+      if (!this.state.clients.list.some(el => el === client.id)) {
+        reject(`This client doesn't exist "${client.id}".`)
+        return
+      }
+
+      this.commandManager.execute(commands[0], client.id, this.state, event.data)
+        .then((data) => {
+          console.info(`Action completed. data: ${data}`)
+          resolve()
+        })
+        .catch((reason) => {
+          console.warn(`Action failed: ${reason}`)
+          reject(reason)
+        })
+    })
   }
 
   onDispose() {

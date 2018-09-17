@@ -2,6 +2,11 @@ export const toArray = (element) => {
   return !Array.isArray(element) ? [element] : [...element]
 }
 
+export const randomName = () => {
+  const randomLetter = () => String.fromCharCode(Math.random() * (90 - 65) + 65)
+  return randomLetter() + randomLetter() + randomLetter()
+}
+
 /**
  * Gets you random number in provided range
  */

@@ -1,7 +1,7 @@
 import { Command, ICommand } from './command'
 import { GameState } from './gameState'
 
-export default class CommandManager {
+export class CommandManager {
 
   commands: Array<Command>
   lastCommand: Command | null

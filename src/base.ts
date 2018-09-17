@@ -15,6 +15,7 @@ export interface IBaseOptions {
   x?: number
   y?: number
   onUpdate?: Function
+  parent?: Base
   parentId?: string
   order?: number
 }
@@ -67,8 +68,8 @@ export abstract class Base extends EventEmitter {
     this.onUpdate = def(options.onUpdate, noop)
 
     // Add myself to my new parent element
-    if (options.parentId) {
-      const parent = Base.get(options.parentId)
+    if (options.parentId || options.parent) {
+      const parent = options.parent || Base.get(options.parentId)
       if (parent) {
         parent.addChild(this)
       }
