@@ -1,16 +1,19 @@
+import { nosync } from 'colyseus'
 import { Base, IBaseOptions } from './base'
 
 export interface IPlayerOptions extends IBaseOptions {
-  clientId:string
+  clientId: string
 }
 
 export class Player extends Base {
 
-  clientId:string
-  score:number
-  timeleft:string
+  clientId: string
+  score: number
+  timeleft: string
+  @nosync
+  markedElements: Base[]
 
-  constructor(options:IPlayerOptions) {
+  constructor(options: IPlayerOptions) {
     super(options)
 
     this.type = 'player'

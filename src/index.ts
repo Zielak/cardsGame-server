@@ -62,8 +62,9 @@ export { _DefaultCommands as DefaultCommands }
 import isClientPlaying from './conditions/isClientPlaying'
 import isPlayersTurn from './conditions/isPlayersTurn'
 import canStartGame from './conditions/canStartGame'
+import isOwner from './conditions/isOwner'
 export const Conditions = {
-  isClientPlaying, isPlayersTurn, canStartGame
+  isClientPlaying, isPlayersTurn, canStartGame, isOwner
 }
 
 export { Container } from './container'

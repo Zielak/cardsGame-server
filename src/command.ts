@@ -1,22 +1,15 @@
 import Condition from './conditions/condition'
 import { GameState } from './gameState'
 
-type IExecutable = Promise<string | {}>
-
-export interface ICommand {
-  context?: {}
-  conditions?: Condition[]
-}
-
-export interface IComandConstructor {
-  new(context: any, conditions: Condition[]): Command
-}
-
 export abstract class Command implements ICommand {
 
   context = {}
+  conditions: Condition[]
+  interactionTarget: InteractionTarget
 
-  constructor(public conditions: Condition[] = []) {
+  constructor(options: ICommandOptions) {
+    this.conditions = options.conditions
+    this.interactionTarget = options.interactionTarget
     this.prepareContext()
   }
 
@@ -31,3 +24,24 @@ export abstract class Command implements ICommand {
 
 }
 
+export type IExecutable = Promise<string | {}>
+
+export type InteractionTarget = {
+  type?: string,
+  name?: string,
+  value?: string
+}
+
+export interface ICommand {
+  context?: { [key: string]: any }
+  // conditions?: Condition[]
+}
+
+export interface ICommandOptions {
+  conditions: Condition[]
+  interactionTarget: InteractionTarget
+}
+
+export interface IComandConstructor {
+  new(options: ICommandOptions): Command
+}

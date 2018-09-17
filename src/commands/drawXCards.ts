@@ -2,6 +2,7 @@ import { Command } from '../command'
 import { Container } from '../container'
 import { Player } from '../player'
 import { Deck } from '../containers/deck'
+import { Hand } from '../containers/hand'
 
 export class DrawXCards extends Command {
 
@@ -18,10 +19,10 @@ export class DrawXCards extends Command {
         state.players.list.find(player => player.clientId === invoker).id
       )
 
-      const myDeck = player.getByType('deck')
-      const myHand = player.getByType('hand')
+      const myDeck = player.getByType('deck') as Deck
+      const myHand = player.getByType('hand') as Hand
 
-      const cardsToTake = this.context.count - myHand.length
+      const cardsToTake = this.context.count - myHand.children.length
 
       myDeck.deal(myHand, cardsToTake)
         .on(Deck.events.DEALT, () => setTimeout(resolve, 250))

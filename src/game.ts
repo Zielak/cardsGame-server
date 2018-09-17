@@ -5,28 +5,27 @@ import { GameState } from './gameState'
 import { Command } from './command'
 import { EventParser } from './eventParser'
 import { PlayerEvent } from './events/playerEvent'
+import { ActionDefinition } from './actionDefinition'
 
-export type CommandsMap = Map<string, Command>
+export type CommandsSet = Set<Command>
 
-export interface IGameOptions {
-  actions: CommandsMap
+interface IGameOptions {
+  actions: CommandsSet
 }
 
 export class Game extends EventEmitter {
 
-  actions: CommandsMap
   commandManager: CommandManager
   eventParser: EventParser
 
   constructor(options: IGameOptions) {
     super()
-    this.actions = options.actions
 
     this.commandManager = new CommandManager()
-    this.eventParser = new EventParser(this.actions)
+    this.eventParser = new EventParser(options.actions)
   }
 
-  actionCompleted(resolve, actionName) {
+  actionCompleted(resolve, actionName?) {
     return status => {
       console.info('Action complete:', status)
       resolve(status)
@@ -34,7 +33,7 @@ export class Game extends EventEmitter {
     }
   }
 
-  actionFailed(reject, actionName) {
+  actionFailed(reject, actionName?) {
     return status => {
       console.warn('Action failed:', status)
       reject(status)
@@ -50,40 +49,21 @@ export class Game extends EventEmitter {
    * @param {object} state
    * @returns {Promise}
    */
-  performAction<T extends GameState>(client: colyseus.Client, state: T, data: PlayerEvent) {
+  performAction<T extends GameState>(client: colyseus.Client, state: T, event: PlayerEvent) {
     return new Promise((resolve, reject) => {
-      const command = this.eventParser.getAction(data)
-      const actionName = data.action // TODO: OR????
+      const commands = this.eventParser.getCommandsByInteraction(event)
 
-      if (command === undefined || typeof command === 'undefined') {
-        reject(`Unknown action.`)
-        return
-      }
-
-      console.info(`-= performAction: client: "${client.id}", action: ${data.action}`)
-      if (!actionName) {
-        console.info(`   User Event:`, data)
-        // console.info(`   Found intentions: ${action.length}`)
-      }
-
-      if (!state.clients || state.clients.length <= 0) {
-        reject(`There are no clients.`)
-        return
-      }
+      // console.info(`-= performAction: client: "${client.id}", action: ${event.action}`)
 
       if (!state.clients.list.some(el => el === client.id)) {
         reject(`This client doesn't exist "${client.id}".`)
         return
       }
 
-      this.commandManager.execute(command, client.id, state, data.data)
-        .then(this.actionCompleted(resolve, actionName))
-        .catch(this.actionFailed(reject, actionName))
+      this.commandManager.execute(commands[0], client.id, state, event.data)
+        .then(this.actionCompleted(resolve))
+        .catch(this.actionFailed(reject))
     })
-  }
-
-  getAllPossibleMoves() {
-    return this.actions
   }
 
   getCurrentPossibleMoves() {

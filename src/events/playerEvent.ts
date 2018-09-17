@@ -1,5 +1,6 @@
 export type PlayerEvent = {
-  invoker: string
-  action: string
-  data: object
+  invoker: string       // clientID
+  eventType: string     // most likely 'click'
+  eventTarget?: string  // ID of target element
+  data?: any            // additional/optional data
 }

@@ -2,22 +2,19 @@ import { Conditions, GameRoom, GameState, Deck, Presets, Pile } from '../../'
 import { IGameRoom } from '../../src/gameRoom'
 
 import PlayCardCommand from './actions/playCard'
-import { CommandsMap } from '../../src/game'
 
 export class SimpleTest<T extends GameState> extends GameRoom<T> implements IGameRoom {
 
   name = 'SimpleTest'
 
-  /**
-   * List of all possible commands to execute by players
-   */
-  getCommands(): CommandsMap {
-    return new Map([
-      ['PlayCard', new PlayCardCommand([
-        Conditions.isPlayersTurn, Conditions.isClientPlaying
-      ])]
-    ])
-  }
+  possibleActions = new Set([
+    new PlayCardCommand({
+      conditions: [
+        Conditions.isPlayersTurn, Conditions.isOwner
+      ],
+      interactionTarget: { type: 'card' }
+    }),
+  ])
 
   setupGame() {
     const deck = new Deck({

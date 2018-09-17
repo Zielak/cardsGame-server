@@ -1,27 +1,30 @@
 import * as colyseus from 'colyseus'
 import { GameState } from './gameState'
 import { PlayerEvent } from './events/playerEvent'
-import { Game, CommandsMap } from './game'
+import { Game, CommandsSet } from './game'
 
 export interface IGameRoom {
   game: Game
+  possibleActions: CommandsSet
   setupGame(): void
   getGameState(): typeof GameState
-  getCommands(): CommandsMap
 }
 
-export class GameRoom<T extends GameState> extends colyseus.Room<T> {
+export class GameRoom<T extends GameState> extends colyseus.Room<T> implements IGameRoom {
 
   name = 'Example Game'
   game: Game
+
+  /**
+   * List of all possible commands to execute by players
+   */
+  possibleActions: CommandsSet
 
   setupGame() { }
   getGameState(): typeof GameState {
     return GameState
   }
-  getCommands(): CommandsMap {
-    return new Map([])
-  }
+
 
   onInit(options) {
     this.setState(new (this.getGameState())({
@@ -32,7 +35,7 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> {
 
     this.setupGame()
     this.game = new Game({
-      actions: this.getCommands()
+      actions: this.possibleActions
     })
 
     console.log('WarGame room created!', options)
@@ -60,23 +63,28 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> {
     // Timeout => end game? Make player able to go back in?
   }
 
-  onMessage(client: colyseus.Client, data: PlayerEvent) {
-    console.log('MSG: ', JSON.stringify(data))
+  onMessage(client: colyseus.Client, event: PlayerEvent) {
+    console.log('MSG: ', JSON.stringify(event))
+
+    if (!this.state.clients || this.state.clients.length <= 0) {
+      console.warn(`There are no clients.`)
+      return
+    }
 
     // TODO: Handle "StartGame" as - let all agree to start the game
     // if(data.action)
 
-    this.game.performAction(client, this.state, data)
+    this.game.performAction(client, this.state, event)
       .then(status => {
-        console.log('action resolved!', status)
+        console.log(`action resolved! ${status ? status : ''}`)
       })
       .catch(status => {
         this.broadcast({
           event: 'game.error',
-          data: `Client "${client.id}" failed to perform "${data.action}" action.
+          data: `Client "${client.id}" failed to perform action.
           Details: ${status}`
         })
-        console.warn(`Client "${client.id}" failed to perform "${data.action}" action.
+        console.warn(`Client "${client.id}" failed to perform action.
         Details: ${status}`)
       })
   }

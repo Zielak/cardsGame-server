@@ -3,6 +3,7 @@ import { def, noop } from './utils'
 import { EventEmitter } from 'eventemitter3'
 import { nosync } from 'colyseus'
 import { PrimitiveMap } from './entityMap'
+import { Player } from './player';
 
 const objects = new Map<string, Base>()
 
@@ -82,7 +83,7 @@ export abstract class Base extends EventEmitter {
    * @readonly
    * @return {Player|null} `Player` or `null` if this container doesn't belong to anyone
    */
-  get owner() {
+  get owner(): Player {
     if (typeof this.parentId === 'string') {
       return Base.get(this.parentId)
     } else if (this.parentId === null) {
