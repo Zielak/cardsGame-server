@@ -1,8 +1,8 @@
 import { toArray } from './utils'
 import { Command } from './command'
 import { PlayerEvent } from './events/playerEvent'
-import { CommandsSet } from './game'
 import { Base } from './base';
+import { CommandsSet } from './gameRoom'
 
 export class EventParser {
 
@@ -18,7 +18,7 @@ export class EventParser {
 
     const eventTarget = Base.get(event.eventTarget)
     if (!eventTarget) {
-      return
+      return []
     }
 
     const commands = Array.from(this.possibleActions.values())

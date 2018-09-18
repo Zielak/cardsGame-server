@@ -13,6 +13,9 @@ export class CommandManager {
 
   execute(command: Command, invoker: string, state: GameState, data: any): Promise<any> {
     return new Promise((resolve, reject) => {
+      if (!command) {
+        reject(`didn't gave me a Command`)
+      }
       this.isExecutable(command, invoker, data, state).then(() => {
         this.commands.push(command)
         this.lastCommand = command

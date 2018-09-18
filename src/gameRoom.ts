@@ -50,13 +50,13 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
     this.commandManager = new CommandManager()
     this.eventParser = new EventParser(this.possibleActions)
 
-    console.log('WarGame room created!', options)
+    console.log(`${this.name} room created!`, options)
   }
 
   requestJoin(options, isNew) {
     const res = this.clients.length < this.state.maxClients
     if (!res) {
-      console.log('rejected new client!')
+      console.log(`rejected new client! curr: ${this.clients.length}, max: ${this.state.maxClients}`)
     }
     return this.clients.length < this.state.maxClients
   }
@@ -89,6 +89,11 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
       return
     }
 
+    if (!this.state.clients.list.some(el => el === client.id)) {
+      console.warn(`This client doesn't exist "${client.id}".`)
+      return
+    }
+
     this.performAction(client, event)
       .then(status => {
         console.log(`action resolved! ${status ? status : ''}`)
@@ -99,8 +104,6 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
           data: `Client "${client.id}" failed to perform action.
           Details: ${status}`
         })
-        console.warn(`Client "${client.id}" failed to perform action.
-        Details: ${status}`)
       })
   }
 
@@ -113,11 +116,6 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
   performAction<T extends GameState>(client: colyseus.Client, event: PlayerEvent): Promise<any> {
     return new Promise((resolve, reject) => {
       const commands = this.eventParser.getCommandsByInteraction(event)
-
-      if (!this.state.clients.list.some(el => el === client.id)) {
-        reject(`This client doesn't exist "${client.id}".`)
-        return
-      }
 
       this.commandManager.execute(commands[0], client.id, this.state, event.data)
         .then((data) => {
