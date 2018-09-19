@@ -38,6 +38,7 @@ export class GameState {
 
   gameStart() {
     this.started = true
+    this._currentPlayer = this.players.list[this._currentPlayerIdx]
   }
 
   get hasStarted() {
@@ -61,44 +62,44 @@ export class GameState {
   nextPlayer(): Player {
     let currIdx = this._currentPlayerIdx
     if (!this._playerOrderReversed) {
-      if (++currIdx > this.playersCount - 1) {
+      if (++currIdx > this.players.length - 1) {
         currIdx = 0
       }
     } else {
       if (--currIdx < 0) {
-        currIdx = this.playersCount - 1
+        currIdx = this.players.length - 1
       }
     }
     this._currentPlayerIdx = currIdx
-    this._currentPlayer = this.players[currIdx]
+    this._currentPlayer = this.players.list[currIdx]
     return this._currentPlayer
   }
 
   previousPlayer() {
     let currIdx = this._currentPlayerIdx
     if (this._playerOrderReversed) {
-      if (++currIdx > this.playersCount - 1) {
+      if (++currIdx > this.players.length - 1) {
         currIdx = 0
       }
     } else {
       if (--currIdx < 0) {
-        currIdx = this.playersCount - 1
+        currIdx = this.players.length - 1
       }
     }
     this._currentPlayerIdx = currIdx
-    this._currentPlayer = this.players[this.playersOrder[currIdx]]
+    this._currentPlayer = this.players.list[this.playersOrder[currIdx]]
   }
 
   shufflePlayers() {
     let currIdx = this._currentPlayerIdx
-    let i = this.playersCount
+    let i = this.players.length
     if (i === 0) {
       return
     }
     while (--i) {
       const j = Math.floor(Math.random() * (i + 1))
-      const tempi = this.playersList[i]
-      const tempj = this.playersList[j]
+      const tempi = this.players.list[i]
+      const tempj = this.players.list[j]
       this.playersOrder[i] = tempj.id
       this.playersOrder[j] = tempi.id
       // Keep the current player the same
@@ -107,7 +108,7 @@ export class GameState {
       }
     }
     this._currentPlayerIdx = currIdx
-    this._currentPlayer = this.players[this.playersOrder[currIdx]]
+    this._currentPlayer = this.players.list[this.playersOrder[currIdx]]
   }
 
   reversePlayerOrder() {
@@ -118,12 +119,5 @@ export class GameState {
   get currentPlayerIdx() { return this._currentPlayerIdx }
   get currentPlayer() { return this._currentPlayer }
   get currentPlayerPhase() { return this._currentPlayerPhase }
-
-  get playersList(): Player[] {
-    return Object.getOwnPropertyNames(this.players).map(key => this.players[key])
-  }
-  get playersCount(): number {
-    return Object.getOwnPropertyNames(this.players).length
-  }
 
 }

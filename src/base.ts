@@ -85,13 +85,19 @@ export abstract class Base extends EventEmitter {
    * @return {Player|null} `Player` or `null` if this container doesn't belong to anyone
    */
   get owner(): Player {
-    if (typeof this.parentId === 'string') {
-      return Base.get(this.parentId)
-    } else if (this.parentId === null) {
+    if (this.parentId === null) {
       return null
-    } else {
-      return Base.get(this.parentId).owner
     }
+    if (this.parentId) {
+      if (this.parent.type === 'player') {
+        return this.parent as Player
+      }
+      return this.parent.owner
+    }
+  }
+
+  get parent(): Base {
+    return Base.get(this.parentId)
   }
 
   startListeningForEvents() {

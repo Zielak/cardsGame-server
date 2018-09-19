@@ -30,8 +30,8 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
   onStartGame() { }
 
   startGame() {
-    this.state.gameStart()
     this.onStartGame()
+    this.state.gameStart()
   }
 
   getGameState(): typeof GameState {
@@ -41,7 +41,7 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
   onInit(options) {
     this.setState(new (this.getGameState())({
       minClients: options.minClients || 1,
-      maxClients: options.maxClients || 2,
+      maxClients: options.maxClients || 4,
       host: options.host,
     }))
 
@@ -117,7 +117,7 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
     return new Promise((resolve, reject) => {
       const commands = this.eventParser.getCommandsByInteraction(event)
 
-      this.commandManager.execute(commands[0], client.id, this.state, event.data)
+      this.commandManager.execute(commands[0], client.id, this.state, event)
         .then((data) => {
           console.info(`Action completed. data: ${data}`)
           resolve()

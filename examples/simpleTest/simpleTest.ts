@@ -51,7 +51,7 @@ export class SimpleTest<T extends GameState> extends GameRoom<T> implements IGam
       this.state.containers.add(hand)
     }
     const deck = this.state.containers.getByName('deck') as Deck
-    deck.deal(hands, 1)
+    deck.deal(hands)
 
     console.log(`  starting game with ${this.state.players.length} players`)
   }
