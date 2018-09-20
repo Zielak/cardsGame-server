@@ -13,11 +13,9 @@ export interface CardState {
 
 export class BaseCard extends Base {
 
-  state: CardState = {
-    faceUp: false,
-    rotated: 0,
-    marked: false
-  }
+  faceUp = false
+  rotated = 0
+  marked = false
 
   constructor(options: IBaseCardOptions) {
     super(options)
@@ -26,20 +24,16 @@ export class BaseCard extends Base {
 
     // set of conditions used during gameplay
     // this.conditions = new Conditions(options.conditions)
-
-    // All the states at which a single card can be.
-    // faceUp: boolean, rotated: number/angle, marked: boolean
-    this.state = {...this.state, ...options.state}
   }
 
   show() {
-    this.state.faceUp = true
+    this.faceUp = true
   }
   hide() {
-    this.state.faceUp = false
+    this.faceUp = false
   }
   flip() {
-    this.state.faceUp = !this.state.faceUp
+    this.faceUp = !this.faceUp
   }
 
   canBeTakenBy() { }
