@@ -9,8 +9,8 @@
     "url": "git://github.com/Zielak/cardsGame-server.git"
   },
   "scripts": {
-    "start": "ts-node examples/simpleTest/index.ts",
-    "dev": "nodemon -x ts-node examples/simpleTest/index.ts",
+    "start": "ts-node examples/containersTest/index.ts",
+    "dev": "nodemon -x ts-node examples/containersTest/index.ts",
     "precommit": "npm run lint",
     "lint": "eslint ./ -f visualstudio",
     "test": "jest",

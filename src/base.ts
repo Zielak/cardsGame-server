@@ -28,6 +28,8 @@ export abstract class Base extends EventEmitter {
   order: number
   parentId: string | null = null
 
+  x: number
+  y: number
   width: number
   height: number
 
@@ -62,6 +64,8 @@ export abstract class Base extends EventEmitter {
     // Real-life size (in CM) and position
     this.width = def(options.width, 5)
     this.height = def(options.height, 5)
+    this.x = def(options.x, 0)
+    this.y = def(options.y, 0)
 
     this.order = def(options.order, -1)
 
