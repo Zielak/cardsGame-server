@@ -1,5 +1,6 @@
 import { nosync } from 'colyseus'
 import { Base, IBaseOptions } from './base'
+import { def } from './utils'
 
 export interface IPlayerOptions extends IBaseOptions {
   clientId: string
@@ -16,7 +17,7 @@ export class Player extends Base {
   constructor(options: IPlayerOptions) {
     super(options)
 
-    this.type = 'player'
+    this.type = def(options.type, 'player')
 
     this.name = options.name
     this.clientId = options.clientId

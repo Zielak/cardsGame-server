@@ -15,6 +15,7 @@ export class GameState {
   // Clients who are currently playing the game
   players = new EntityMap<Player>()
 
+  // FIXME: What is this exactly and how am I supposed to use it?
   @nosync
   playersOrder: Array<string> = []
 
@@ -30,7 +31,7 @@ export class GameState {
   private _currentPlayer: Player | null = null
   private _currentPlayerPhase = 0
 
-  constructor({ minClients, maxClients, host }) {
+  constructor({ minClients = 1, maxClients = 2, host = '' } = {}) {
     this.minClients = minClients
     this.maxClients = maxClients
     this.host = host
@@ -87,7 +88,8 @@ export class GameState {
       }
     }
     this._currentPlayerIdx = currIdx
-    this._currentPlayer = this.players.list[this.playersOrder[currIdx]]
+    this._currentPlayer = this.players.list[currIdx]
+    return this._currentPlayer
   }
 
   shufflePlayers() {

@@ -46,19 +46,6 @@ export { Command, ICommand, IComandConstructor } from './command'
 import * as _DefaultCommands from './commands/index'
 export { _DefaultCommands as DefaultCommands }
 
-// import CreateContainer from './commands/createContainer'
-// import DrawUpToXCommand from './commands/drawUpToX'
-// import MoveCardToContainer from './commands/moveCardToContainer'
-// import NextPlayer from './commands/nextPlayer'
-// import PreviousPlayer from './commands/prevPlayer'
-// export const DefaultCommands = {
-//   CreateContainer,
-//   DrawUpToXCommand,
-//   MoveCardToContainer,
-//   NextPlayer,
-//   PreviousPlayer
-// }
-
 import isClientPlaying from './conditions/isClientPlaying'
 import isPlayersTurn from './conditions/isPlayersTurn'
 import canStartGame from './conditions/canStartGame'
