@@ -17,10 +17,10 @@ export class BaseCard extends Base {
   rotated = 0
   marked = false
 
-  constructor(options: IBaseCardOptions) {
+  constructor(options: IBaseCardOptions = {}) {
     super(options)
-    this.name = options.name || 'card'
-    this.type = options.type || 'card'
+    this.name = options.name || BaseCard.DEFAULT_NAME
+    this.type = options.type || BaseCard.DEFAULT_TYPE
 
     // set of conditions used during gameplay
     // this.conditions = new Conditions(options.conditions)
@@ -37,5 +37,8 @@ export class BaseCard extends Base {
   }
 
   canBeTakenBy() { }
+
+  static DEFAULT_NAME = 'card'
+  static DEFAULT_TYPE = 'card'
 
 }

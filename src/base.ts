@@ -37,19 +37,11 @@ export abstract class Base extends EventEmitter {
   // It has to be a list with correct order...
   childrenIDs = new PrimitiveMap<BaseObjectID>()
 
-  /**
-   * Ordered list of children elements.
-   * Memoized/cached
-   */
-  get children(): Base[] {
-    return this._childrenInOrder
-  }
   @nosync
   private _childrenInOrder: Base[] = []
 
   @nosync
   onUpdate: Function
-
 
   constructor(options: IBaseOptions = {}) {
     super()
@@ -82,49 +74,9 @@ export abstract class Base extends EventEmitter {
     this.startListeningForEvents()
   }
 
-  /**
-   * Get the real owner of this container, by traversing `this.parent` chain.
-   *
-   * @readonly
-   * @return {Player|null} `Player` or `null` if this container doesn't belong to anyone
-   */
-  get owner(): Player {
-    if (this.parentId === null) {
-      return null
-    }
-    if (this.parentId) {
-      if (this.parent.type === 'player') {
-        return this.parent as Player
-      }
-      return this.parent.owner
-    }
-  }
-
-  get parent(): Base {
-    return Base.get(this.parentId)
-  }
-
   startListeningForEvents() {
     this.on('child.removed', child => this.removeChild(child))
     // this.on('child.added')
-  }
-
-  /**
-   * Gives you the topmost ELEMENT in this container
-   */
-  get top() {
-    return this.children.reduce((prev, current) =>
-      prev.order > current.order ? prev : current
-    )
-  }
-
-  /**
-   * Gives you an ELEMENT from the bottom
-   */
-  get bottom() {
-    return this.children.reduce((prev, current) =>
-      prev.order < current.order ? prev : current
-    )
   }
 
   /**
@@ -153,6 +105,8 @@ export abstract class Base extends EventEmitter {
    * @param {any|string} element reference to an object or its ID
    */
   addChild(element: Base | string, order?: number) {
+    if (element === undefined) return this
+
     const child: Base = typeof element === 'string' ? Base.get(element) : element
 
     // Notify element's last parent of change
@@ -174,6 +128,17 @@ export abstract class Base extends EventEmitter {
     this.keepChildrensOrder()
     child.onUpdate(child)
     this.onUpdate(this)
+    return this
+  }
+
+  addChildren(elements: Base[], orders?: number[]) {
+    elements.forEach((child, idx) => {
+      if (orders) {
+        this.addChild(child, orders[idx])
+      } else {
+        this.addChild(child)
+      }
+    })
     return this
   }
 
@@ -275,6 +240,61 @@ export abstract class Base extends EventEmitter {
   // getByClass<T>(cls: T): T {
   //   return
   // }
+
+  /**
+   * Ordered list of children elements.
+   * Memoized/cached
+   */
+  get children(): Base[] {
+    return this._childrenInOrder
+  }
+
+  /**
+   * Get the real owner of this container, by traversing `this.parent` chain.
+   *
+   * @readonly
+   * @return {Player|null} `Player` or `null` if this container doesn't belong to anyone
+   */
+  get owner(): Player {
+    if (this.parentId === null) {
+      return null
+    }
+    if (this.parentId) {
+      if (this.parent.type === 'player') {
+        return this.parent as Player
+      }
+      return this.parent.owner
+    }
+  }
+
+  get parent(): Base {
+    return Base.get(this.parentId)
+  }
+
+  /**
+   * Alias for `children.length`
+   */
+  get length() {
+    return this.children.length
+  }
+
+  /**
+   * Gives you the topmost ELEMENT in this container
+   */
+  get top() {
+    return this.children.reduce((prev, current) =>
+      prev.order > current.order ? prev : current
+    )
+  }
+
+  /**
+   * Gives you an ELEMENT from the bottom
+   */
+  get bottom() {
+    return this.children.reduce((prev, current) =>
+      prev.order < current.order ? prev : current
+    )
+  }
 
   /**
    * Get a reference to the object by its ID

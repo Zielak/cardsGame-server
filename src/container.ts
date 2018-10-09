@@ -10,15 +10,11 @@ export class Container extends Base {
   // FIXME: are conditions required on the CONTAINER?!?!
   conditions: Conditions
 
-  constructor(options: IContainerOptions) {
+  constructor(options: IContainerOptions = {}) {
     super(options)
 
     // set of conditions used during gameplay
     this.conditions = new Conditions(options.conditions, this)
-  }
-
-  get length() {
-    return this.children.length
   }
 
   /**
