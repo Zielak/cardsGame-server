@@ -16,6 +16,10 @@ export const float = (min = 0, max = 1) => Math.floor(
 
 export const limit = (val, min = 0, max = 1) => val < min ? min : val > max ? max : val
 
+export const isPromise = obj => exists(obj) &&
+  (typeof obj === 'object' || typeof obj === 'function') &&
+  typeof obj.then === 'function'
+
 /**
  * Returns `def` if the `value` really is undefined
  */

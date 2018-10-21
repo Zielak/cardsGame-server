@@ -2,11 +2,6 @@ TODO: document this API
 
 # Game
 
-## Events
-
-- `ACTION_COMPLETED(actionName, status)`
-- `ACTION_FAILED(actionName, status)`
-
 # Conditions
 
 # Commands

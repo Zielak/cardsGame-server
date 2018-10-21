@@ -1,21 +1,17 @@
-import { CreateGameServer, Row, Spread, ClassicCard, Base, Container } from '../../src'
-import { Conditions, GameRoom, GameState, Deck, Presets, Pile, Player, Hand } from '../../'
-import { IGameRoom } from '../../src/gameRoom'
+import { GameRoom, GameState, Deck, Pile, Hand, CreateGameServer, Row, Spread, ClassicCard, Container } from '../../'
+import { IGameRoom, ActionsSet } from '../../src/gameRoom'
 
-// import PlayCardCommand from './actions/playCard'
-import { randomName } from '../../src/utils'
+import { MoveCardsCommand } from './commands/moveCards'
 
 class ContainersTest<T extends GameState> extends GameRoom<T> implements IGameRoom {
 
   name = 'ContainersTest'
 
-  possibleActions = new Set([
-    // new PlayCardCommand({
-    //   conditions: [
-    //     Conditions.isPlayersTurn, Conditions.isOwner
-    //   ],
-    //   interactionTarget: { type: 'card' }
-    // }),
+  possibleActions: ActionsSet = new Set([
+    {
+      command: MoveCardsCommand,
+      interactionTarget: { type: 'card' }
+    },
   ])
 
   onSetupGame() {

@@ -1,4 +1,4 @@
-import Condition from './condition'
+import { Condition } from './condition'
 import { Player } from '../player'
 
 const isClientPlaying: Condition = (invoker, state) => new Promise((resolve, reject) => {

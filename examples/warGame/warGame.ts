@@ -1,12 +1,11 @@
 import {
-  DefaultCommands, Command, Deck, Presets, GameState, GameRoom
+  DefaultCommands, Deck, Presets, GameState, GameRoom
 } from '../../'
 
-import GameStartCommand from './actions/gameStart'
-import PlayCardCommand from './actions/playCard'
-import DrawUpToThree from './actions/drawUpToThree'
-import TestDeal from './actions/testDeal'
-import { CommandsMap } from '../../src/game'
+import GameStartCommand from './commands/gameStart'
+import PlayCardCommand from './commands/playCard'
+import DrawUpToThree from './commands/drawUpToThree'
+import TestDeal from './commands/testDeal'
 import { IGameRoom } from '../../src/gameRoom'
 
 class WarGameState extends GameState {
@@ -16,19 +15,17 @@ class WarGameState extends GameState {
 export default class WarGame<T extends WarGameState> extends GameRoom<T> implements IGameRoom {
 
   name = 'WarGame'
+  possibleActions = new Set([
+    new GameStartCommand(),
+    new PlayCardCommand(),
+    new DefaultCommands.NextPlayer(),
+    new DefaultCommands.PreviousPlayer(),
+    new DrawUpToThree(),
+    new TestDeal()
+  ])
 
   getGameState(): typeof GameState {
     return WarGameState
-  }
-  getCommands(): CommandsMap {
-    return new Map([
-      ['GameStart', new GameStartCommand()],
-      ['PlayCard', new PlayCardCommand()],
-      ['NextPlayer', new DefaultCommands.NextPlayer()],
-      ['PreviousPlayer', new DefaultCommands.PreviousPlayer()],
-      ['DrawUpToThree', new DrawUpToThree()],
-      ['TestDeal', new TestDeal()]
-    ])
   }
 
   setupGame() {

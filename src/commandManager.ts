@@ -1,32 +1,47 @@
-import { Command, ICommand } from './command'
+import { Command, IExecutable } from './command'
 import { GameState } from './gameState'
-import { PlayerEvent } from './events/playerEvent';
+import { PlayerEvent } from './events/playerEvent'
+import { ActionTemplate } from './gameRoom'
 
 export class CommandManager {
 
-  commands: Array<Command>
+  commandsHistory: Array<Command>
   lastCommand: Command | null
 
   constructor() {
-    this.commands = []
+    this.commandsHistory = []
     this.lastCommand = null
   }
 
-  execute(command: Command, invoker: string, state: GameState, event: PlayerEvent): Promise<any> {
+  execute(action: ActionTemplate, invoker: string, state: GameState, event: PlayerEvent) {
     return new Promise((resolve, reject) => {
-      if (!command) {
-        reject(`didn't gave me a Command`)
-      }
-      this.isExecutable(command, invoker, event, state).then(() => {
-        this.commands.push(command)
-        this.lastCommand = command
-        command.execute(invoker, state, event).then(resolve).catch(reject)
-      }).catch(reject)
+      this.isLegal(action, invoker, state, event).then(() => {
+        if (this.lastCommand && this.lastCommand.pending) {
+          console.info(`last command is pending, redirecting that event there.`)
+          this.lastCommand.execute(invoker, state, event)
+        } else {
+          const newCommand = new action.command()
+          this.commandsHistory.push(newCommand)
+          this.lastCommand = newCommand
+          newCommand.executeFirstTime(invoker, state, event)
+            .then(resolve)
+            .catch(reject)
+        }
+      })
     })
   }
 
-  private isExecutable(command: Command, invoker, event: PlayerEvent, state: GameState): Promise<any> {
-    const promises = command.conditions.map(condition => {
+
+  /**
+   * Checks all attatched conditions (if any) to see if this action is legal
+   */
+  private isLegal(action: ActionTemplate, invoker, state: GameState, event: PlayerEvent): Promise<any> {
+    if (!action.conditions) {
+      // Condition-leess action, just go
+      return Promise.resolve()
+    }
+
+    const promises = action.conditions.map(condition => {
       return condition(invoker, state, event)
     })
     return Promise.all(promises)

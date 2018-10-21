@@ -1,8 +1,8 @@
-import Condition from './condition'
-import { PlayerEvent } from '../events/playerEvent'
+import { Condition } from './condition'
+import { PlayerEventRaw } from '../events/playerEvent'
 import { Base } from '../base'
 
-const isOwner: Condition = (invoker, state, event: PlayerEvent) => new Promise((resolve, reject) => {
+const isOwner: Condition = (invoker, state, event: PlayerEventRaw) => new Promise((resolve, reject) => {
   const player = state.getPlayerByClientId(invoker)
   if (!player) {
     reject(`Couldn't find this client in players list`)

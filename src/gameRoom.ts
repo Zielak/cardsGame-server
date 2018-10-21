@@ -1,14 +1,22 @@
 import * as colyseus from 'colyseus'
 import { GameState } from './gameState'
-import { PlayerEvent } from './events/playerEvent'
+import { PlayerEventRaw, PlayerEvent } from './events/playerEvent'
 import { CommandManager } from './commandManager'
 import { EventParser } from './eventParser'
-import { Command } from './command'
+import { InteractionTarget, CommandConstructor } from './command'
+import { Condition } from './conditions/condition'
+import { Base } from './base'
 
-export type CommandsSet = Set<Command>
+export type ActionsSet = Set<ActionTemplate>
+
+export type ActionTemplate = {
+  command: CommandConstructor;
+  conditions?: Condition[];
+  interactionTarget: InteractionTarget;
+}
 
 export interface IGameRoom {
-  possibleActions: CommandsSet
+  possibleActions: ActionsSet
   getGameState(): typeof GameState
   onSetupGame(): void
   onStartGame(): void
@@ -24,7 +32,7 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
   /**
    * List of all possible commands to execute by players
    */
-  possibleActions: CommandsSet
+  possibleActions: ActionsSet
 
   onSetupGame() { }
   onStartGame() { }
@@ -75,7 +83,7 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
     // Timeout => end game? Make player able to go back in?
   }
 
-  onMessage(client: colyseus.Client, event: PlayerEvent) {
+  onMessage(client: colyseus.Client, event: PlayerEventRaw) {
     console.log('MSG: ', JSON.stringify(event))
 
     if (!this.state.clients || this.state.clients.length <= 0) {
@@ -94,17 +102,7 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
       return
     }
 
-    this.performAction(client, event)
-      .then(status => {
-        console.log(`action resolved! ${status ? status : ''}`)
-      })
-      .catch(status => {
-        this.broadcast({
-          event: 'game.error',
-          data: `Client "${client.id}" failed to perform action.
-          Details: ${status}`
-        })
-      })
+    this.performAction(client, this.parseEvent(event))
   }
 
   /**
@@ -113,20 +111,34 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
    * @param client object, with id and stuff. Otherwise will act as the "game" itself issues this command
    * @param event
    */
-  performAction<T extends GameState>(client: colyseus.Client, event: PlayerEvent): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const commands = this.eventParser.getCommandsByInteraction(event)
+  performAction(client: colyseus.Client, event: PlayerEvent) {
 
-      this.commandManager.execute(commands[0], client.id, this.state, event)
-        .then((data) => {
-          console.info(`Action completed. data: ${data}`)
-          resolve()
+    const actions = this.eventParser.getActionsByInteraction(event)
+
+    // TODO: not the first one, but precisely decide which one!
+    this.commandManager.execute(actions[0], client.id, this.state, event)
+      .then((data) => {
+        console.info(`Action completed. data: ${data}`)
+      })
+      .catch((reason) => {
+        console.warn(`Action failed: ${reason}`)
+        this.broadcast({
+          event: 'game.error',
+          data: `Client "${client.id}" failed to perform action.
+          Details: ${reason}`
         })
-        .catch((reason) => {
-          console.warn(`Action failed: ${reason}`)
-          reject(reason)
-        })
-    })
+      })
+  }
+
+  parseEvent(event: PlayerEventRaw): PlayerEvent {
+    const parsed: PlayerEvent = {
+      eventType: event.eventType,
+    }
+    if (event.eventTarget) {
+      parsed.eventTarget = Base.get(event.eventTarget)
+    }
+
+    return parsed
   }
 
   onDispose() {

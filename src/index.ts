@@ -41,7 +41,7 @@ export const CreateGameServer = (rooms: typeof GameRoom[]): colyseus.Server => {
 export { Base } from './base'
 export { BaseCard } from './baseCard'
 export { ClassicCard } from './classicCard'
-export { Command, ICommand, IComandConstructor } from './command'
+export { Command, ICommand, IComandConstructor, IExecutable } from './command'
 
 import * as _DefaultCommands from './commands/index'
 export { _DefaultCommands as DefaultCommands }
@@ -65,6 +65,6 @@ export { GameState } from './gameState'
 export { GameRoom } from './gameRoom'
 export { Player } from './player'
 import * as Presets from './presets'
-export { PlayerEvent } from './events/playerEvent'
+export { PlayerEventRaw, PlayerEvent } from './events/playerEvent'
 export { Presets }
 export { Table } from './table'

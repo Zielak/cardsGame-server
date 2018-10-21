@@ -3,7 +3,6 @@
 import { Command } from '../command'
 import { Container } from '../container'
 import { GameState } from '../gameState'
-import Condition from '../conditions/condition'
 const containerClasses = {
   'container': require('../container'),
   'deck': require('../containers/deck'),

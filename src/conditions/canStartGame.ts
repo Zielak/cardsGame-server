@@ -1,4 +1,4 @@
-import Condition from './condition'
+import { Condition } from './condition'
 
 const canStartGame: Condition = (invoker, state) => new Promise((resolve, reject) => {
   if (state.hasStarted) {

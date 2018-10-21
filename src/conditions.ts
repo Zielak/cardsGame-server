@@ -5,7 +5,7 @@ import { Base } from './base'
  * Conditions define how the game plays during player's round
  */
 
-export default class Conditions extends Map {
+export class Conditions extends Map {
 
   context
 

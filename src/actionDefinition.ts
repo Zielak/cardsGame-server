@@ -1,4 +1,4 @@
-import Condition from './conditions/condition'
+import { Condition } from './conditions/condition'
 import { Command } from './command'
 
 export type ActionDefinition = {

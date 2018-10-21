@@ -12,7 +12,7 @@ export class Player extends Base {
   score: number
   timeleft: string
   @nosync
-  markedElements: Base[]
+  markedElements: Set<Base>
 
   constructor(options: IPlayerOptions) {
     super(options)
@@ -26,6 +26,14 @@ export class Player extends Base {
     this.score = 0
     // Infinite time left for testing
     this.timeleft = 'Infinity'
+  }
+
+  mark(element: Base) {
+    this.markedElements.add(element)
+  }
+
+  unMark(element: Base): boolean {
+    return this.markedElements.delete(element)
   }
 
 }

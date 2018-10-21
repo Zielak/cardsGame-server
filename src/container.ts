@@ -1,4 +1,4 @@
-import Conditions from './conditions'
+import { Conditions } from './conditions'
 import { Base, IBaseOptions } from './base'
 
 export interface IContainerOptions extends IBaseOptions {

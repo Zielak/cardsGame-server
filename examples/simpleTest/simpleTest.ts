@@ -1,20 +1,21 @@
 import { Conditions, GameRoom, GameState, Deck, Presets, Pile, Player, Hand } from '../../'
-import { IGameRoom } from '../../src/gameRoom'
+import { IGameRoom, ActionsSet } from '../../src/gameRoom'
 
-import PlayCardCommand from './actions/playCard'
-import { randomName } from '../../src/utils';
+import PlayCardCommand from './commands/playCard'
+import { randomName } from '../../src/utils'
 
 export class SimpleTest<T extends GameState> extends GameRoom<T> implements IGameRoom {
 
   name = 'SimpleTest'
 
-  possibleActions = new Set([
-    new PlayCardCommand({
+  possibleActions: ActionsSet = new Set([
+    {
+      command: PlayCardCommand,
       conditions: [
         Conditions.isPlayersTurn, Conditions.isOwner
       ],
       interactionTarget: { type: 'card' }
-    }),
+    },
   ])
 
   onSetupGame() {

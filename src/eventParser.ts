@@ -1,29 +1,27 @@
 import { toArray } from './utils'
-import { Command } from './command'
 import { PlayerEvent } from './events/playerEvent'
-import { Base } from './base';
-import { CommandsSet } from './gameRoom'
+import { ActionsSet, ActionTemplate } from './gameRoom'
 
 export class EventParser {
 
-  constructor(private possibleActions: CommandsSet) {
+  constructor(private possibleActions: ActionsSet) {
 
   }
 
-  getCommandsByInteraction(event: PlayerEvent): Command[] {
+  getActionsByInteraction(event: PlayerEvent): ActionTemplate[] {
     // Get action object, if its simple action or user interaction?
     // const action = data.action ?
     //   this.actions.get(data.action) :
     //   this.mapEventToIntention(data)
 
-    const eventTarget = Base.get(event.eventTarget)
+    const eventTarget = event.eventTarget
     if (!eventTarget) {
       return []
     }
 
-    const commands = Array.from(this.possibleActions.values())
-      .filter(command => {
-        const commandTarget = command.interactionTarget
+    const actions = Array.from(this.possibleActions.values())
+      .filter(template => {
+        const commandTarget = template.interactionTarget
 
         if (commandTarget.name) {
           if (eventTarget.name !== commandTarget.name) {
@@ -46,7 +44,7 @@ export class EventParser {
     // TODO: maybe filter by conditions here? insterad of in commands manager?
     // })
 
-    return commands
+    return actions
   }
 
   /*
