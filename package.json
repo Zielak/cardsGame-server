@@ -1,6 +1,6 @@
 {
   "name": "multiplayer-game",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Server side of multiplayer cards game",
   "main": "src/index",
   "types": "src/index",
@@ -9,8 +9,8 @@
     "url": "git://github.com/Zielak/cardsGame-server.git"
   },
   "scripts": {
-    "start": "ts-node examples/containersTest/index.ts",
-    "dev": "nodemon -x ts-node examples/containersTest/index.ts",
+    "start": "ts-node examples/makao/index.ts",
+    "dev": "nodemon -x ts-node examples/makao/index.ts",
     "precommit": "npm run lint",
     "lint": "eslint ./ -f visualstudio",
     "test": "jest",

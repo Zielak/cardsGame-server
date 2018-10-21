@@ -9,6 +9,26 @@ export type PlayerEventRaw = {
 
 export type PlayerEvent = {
   eventType: string
-  eventTarget?: Base
+  target?: Base
+  details: {
+    name?: string | string[]
+    type?: string | string[]
+    value?: number | number[]
+    rank?: string | string[]
+    suit?: string | string[]
+  }
   data?: any
+}
+
+export type InteractionDefinition = {
+  eventType?: string
+  name?: string | string[]
+  type?: string | string[]
+  value?: number | number[]
+  rank?: string | string[]
+  suit?: string | string[]
+}
+
+export enum InteractionType {
+
 }

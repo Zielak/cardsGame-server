@@ -1,5 +1,4 @@
 import { Base, IBaseOptions } from './base'
-// import Conditions from './conditions'
 
 export interface IBaseCardOptions extends IBaseOptions {
   state?: CardState

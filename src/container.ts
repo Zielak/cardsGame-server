@@ -1,21 +1,6 @@
-import { Conditions } from './conditions'
-import { Base, IBaseOptions } from './base'
-
-export interface IContainerOptions extends IBaseOptions {
-  conditions?: Array<Function>
-}
+import { Base } from './base'
 
 export class Container extends Base {
-
-  // FIXME: are conditions required on the CONTAINER?!?!
-  conditions: Conditions
-
-  constructor(options: IContainerOptions = {}) {
-    super(options)
-
-    // set of conditions used during gameplay
-    this.conditions = new Conditions(options.conditions, this)
-  }
 
   /**
    * Shuffle all elements, Fisher yates shuffle

@@ -24,7 +24,7 @@ export default class DrawUpToX extends Command {
       const cardsToTake = this.context.maxCards - myHand.length
 
       myDeck.deal(myHand, cardsToTake)
-        .on(Deck.events.DEALT, () => setTimeout(resolve, 250))
+        .then(() => setTimeout(resolve, 250))
 
     })
   }

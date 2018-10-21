@@ -2,13 +2,13 @@ import { BaseCard, IBaseCardOptions } from './baseCard'
 
 export interface IClassicCardOptions extends IBaseCardOptions {
   suit: string
-  rank: string|number
+  rank: string
 }
 
 export class ClassicCard extends BaseCard {
 
   suit: string
-  rank: string|number
+  rank: string
 
   constructor(options: IClassicCardOptions) {
     super(options)

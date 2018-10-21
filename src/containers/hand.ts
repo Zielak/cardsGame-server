@@ -1,4 +1,5 @@
-import { Container, IContainerOptions } from '../container'
+import { Container } from '../container'
+import { IBaseOptions } from '../base'
 
 /**
  * TODO: Should ensure that none of the cards in hand
@@ -7,7 +8,7 @@ import { Container, IContainerOptions } from '../container'
 
 export class Hand extends Container {
 
-  constructor(options: IContainerOptions) {
+  constructor(options: IBaseOptions) {
     super({
       ...options,
       type: options.type || 'hand',

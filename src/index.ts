@@ -46,12 +46,14 @@ export { Command, ICommand, IComandConstructor, IExecutable } from './command'
 import * as _DefaultCommands from './commands/index'
 export { _DefaultCommands as DefaultCommands }
 
+export { Condition } from './conditions/condition'
+import { OR } from './conditions/condition'
 import isClientPlaying from './conditions/isClientPlaying'
 import isPlayersTurn from './conditions/isPlayersTurn'
 import canStartGame from './conditions/canStartGame'
 import isOwner from './conditions/isOwner'
 export const Conditions = {
-  isClientPlaying, isPlayersTurn, canStartGame, isOwner
+  OR, isClientPlaying, isPlayersTurn, canStartGame, isOwner
 }
 
 export { Container } from './container'

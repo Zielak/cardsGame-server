@@ -1,5 +1,6 @@
-import { Container, IContainerOptions } from '../container'
+import { Container } from '../container'
 import { float } from '../utils'
+import { IBaseOptions } from '../base'
 
 const cardsDataFactory = (card, limits): CardsData => {
   return {
@@ -27,7 +28,7 @@ interface PileVisualLimits {
   maxY: number
 }
 
-export interface IPileOptions extends IContainerOptions {
+export interface IPileOptions extends IBaseOptions {
   limits?: PileVisualLimits
 }
 

@@ -1,4 +1,3 @@
-import { Condition } from './conditions/condition'
 import { GameState } from './gameState'
 import { PlayerEvent } from './events/playerEvent'
 
@@ -6,7 +5,7 @@ export interface CommandConstructor {
   new(): Command;
 }
 
-export abstract class Command implements ICommand {
+export abstract class Command {
 
   context = {}
 
@@ -23,7 +22,7 @@ export abstract class Command implements ICommand {
   /**
    * To be overriden. Prepare your context here.
    */
-  abstract prepareContext()
+  prepareContext() { }
 
   /**
    * Return a `Promise` to indicate that this action is async. Remember to call `this.finish()` or `this.fail()` to complete this action.
@@ -68,22 +67,13 @@ export abstract class Command implements ICommand {
 
 export type IExecutable = Promise<string | {}>
 
-export type InteractionTarget = {
-  type?: string,
-  name?: string,
-  value?: string
-}
-
 export interface ICommand {
   context?: { [key: string]: any }
-  // conditions?: Condition[]
-}
-
-export interface ICommandOptions {
-  conditions: Condition[]
-  interactionTarget: InteractionTarget
+  prepareContext?: () => void
+  execute: (invoker: string, state: GameState, event: PlayerEvent) => void
+  undo: (state: GameState) => void | IExecutable
 }
 
 export interface IComandConstructor {
-  new(options: ICommandOptions): Command
+  new(): Command
 }

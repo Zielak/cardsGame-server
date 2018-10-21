@@ -1,18 +1,19 @@
 import * as colyseus from 'colyseus'
 import { GameState } from './gameState'
-import { PlayerEventRaw, PlayerEvent } from './events/playerEvent'
+import { PlayerEventRaw, PlayerEvent, InteractionDefinition } from './events/playerEvent'
 import { CommandManager } from './commandManager'
-import { EventParser } from './eventParser'
-import { InteractionTarget, CommandConstructor } from './command'
+import { CommandConstructor } from './command'
 import { Condition } from './conditions/condition'
 import { Base } from './base'
+import { Player } from './player'
+import { ClassicCard } from './classicCard'
 
 export type ActionsSet = Set<ActionTemplate>
 
 export type ActionTemplate = {
   command: CommandConstructor;
   conditions?: Condition[];
-  interactionTarget: InteractionTarget;
+  interaction: InteractionDefinition | InteractionDefinition[];
 }
 
 export interface IGameRoom {
@@ -27,7 +28,6 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
   name = 'Example Game'
 
   commandManager: CommandManager
-  eventParser: EventParser
 
   /**
    * List of all possible commands to execute by players
@@ -36,8 +36,17 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
 
   onSetupGame() { }
   onStartGame() { }
+  preparePlayer(player: Player) { }
 
   startGame() {
+    this.clients.forEach(client => {
+      const player = new Player({
+        clientId: client.id
+      })
+      this.state.players.add(player)
+      this.preparePlayer(player)
+    })
+
     this.onStartGame()
     this.state.gameStart()
   }
@@ -56,7 +65,6 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
     this.onSetupGame()
 
     this.commandManager = new CommandManager()
-    this.eventParser = new EventParser(this.possibleActions)
 
     console.log(`${this.name} room created!`, options)
   }
@@ -95,6 +103,9 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
     if (event.data === 'start' && !this.state.hasStarted) {
       this.startGame()
       return
+    } else if (event.data === 'start' && this.state.hasStarted) {
+      console.log(`Game is already started, ignoring...`)
+      return
     }
 
     if (!this.state.clients.list.some(el => el === client.id)) {
@@ -113,7 +124,7 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
    */
   performAction(client: colyseus.Client, event: PlayerEvent) {
 
-    const actions = this.eventParser.getActionsByInteraction(event)
+    const actions = this.getActionsByInteraction(event)
 
     // TODO: not the first one, but precisely decide which one!
     this.commandManager.execute(actions[0], client.id, this.state, event)
@@ -130,12 +141,55 @@ export class GameRoom<T extends GameState> extends colyseus.Room<T> implements I
       })
   }
 
+  getActionsByInteraction(event: PlayerEvent): ActionTemplate[] {
+    const eventTarget = event.target
+    if (!eventTarget) {
+      return []
+    }
+
+    const actions = Array.from(this.possibleActions.values())
+      .filter(template => {
+        const interaction = template.interaction
+
+        const matches = (interaction: InteractionDefinition) => {
+          const checkProp = prop => {
+            if (interaction[prop]) {
+              if (eventTarget[prop] !== interaction[prop]) {
+                return false
+              }
+            }
+            // Prop either matches or was not defined/desired
+            return true
+          }
+          return ['name', 'type', 'value', 'rank', 'suit'].every(checkProp)
+        }
+
+        if (Array.isArray(interaction)) {
+          return interaction.some(matches)
+        } else {
+          return matches(interaction)
+        }
+      })
+
+    return actions
+  }
+
   parseEvent(event: PlayerEventRaw): PlayerEvent {
     const parsed: PlayerEvent = {
       eventType: event.eventType,
+      details: {},
     }
     if (event.eventTarget) {
-      parsed.eventTarget = Base.get(event.eventTarget)
+      parsed.target = Base.get(event.eventTarget)
+      parsed.details.name = parsed.target.name
+      parsed.details.type = parsed.target.type
+      if (parsed.target instanceof ClassicCard) {
+        parsed.details.rank = parsed.target.rank
+        parsed.details.suit = parsed.target.suit
+      }
+    }
+    if (event.data) {
+      parsed.data = event.data
     }
 
     return parsed
