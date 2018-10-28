@@ -47,16 +47,16 @@ class ContainersTest<T extends GameState> extends GameRoom<T> implements IGameRo
   preparePlayer(player: Player) {
     this.state.containers.add(
       new Hand({
-        name: 'mainHand',
+        name: 'tmpHand',
         parent: player,
-        x: 0, y: 0
+        x: 120, y: -80
       })
     )
     this.state.containers.add(
       new Hand({
-        name: 'tmpHand',
+        name: 'mainHand',
         parent: player,
-        x: 120, y: -80
+        x: 0, y: 0
       })
     )
   }
