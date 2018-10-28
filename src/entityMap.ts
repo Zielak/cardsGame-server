@@ -2,28 +2,24 @@ import { Base } from './base'
 // import { nonenumerable } from 'nonenumerable'
 import { nosync } from 'colyseus'
 
-export class EntityMap<T extends Base> {
-  [entityId: string]: T | any
+export class EntityMap {
+  [entityId: string]: Base | any
 
   @nosync
-  add(el: T) {
+  add(el: Base) {
     return this[el.id] = el
   }
   @nosync
-  remove(el: T) {
+  remove(el: Base) {
     return delete this[el.id]
   }
   @nosync
-  getByType(type: string): T[] {
-    return this.list.filter(el => el.type === type)
+  getByType<T extends Base>(type: string): T[] {
+    return this.list<T>().filter(el => el.type === type)
   }
-  /**
-   * Name ought to be uniqe. This will return only one element
-   * @param name
-   */
   @nosync
-  getByName(name: string): T {
-    return this.list.find(el => el.name === name)
+  getByName<T extends Base>(name: string): T[] {
+    return this.list<T>().filter(el => el.name === name)
   }
   @nosync
   get length(): number {
@@ -34,7 +30,7 @@ export class EntityMap<T extends Base> {
    * TODO: memoize, update on add/remove
    */
   @nosync
-  get list(): T[] {
+  list<T extends Base>(): T[] {
     return Object.getOwnPropertyNames(this)
       .map(key => this[key])
       .sort((a: T, b: T) => a.order - b.order)

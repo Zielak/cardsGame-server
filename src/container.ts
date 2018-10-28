@@ -1,6 +1,10 @@
-import { Base } from './base'
+import { Base, IBaseOptions } from './base'
 
 export class Container extends Base {
+
+  constructor(options: IBaseOptions = {}) {
+    super(options)
+  }
 
   /**
    * Shuffle all elements, Fisher yates shuffle
