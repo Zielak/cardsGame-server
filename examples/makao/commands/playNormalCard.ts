@@ -12,8 +12,8 @@ export class PlayNormalCard extends Command implements ICommand {
 
   execute(invoker: string, state: GameState, event: PlayerEvent) {
     const player = state.currentPlayer
-    const pile = state.containers.getByName('pile') as Pile
-    const hand = state.containers.getByType('hand').find(hand => {
+    const pile = state.elements.getByName('pile')[0] as Pile
+    const hand = state.elements.getByType('hand').find(hand => {
       return hand.parent === player
     })
     const card = event.target as ClassicCard
@@ -26,7 +26,7 @@ export class PlayNormalCard extends Command implements ICommand {
 
     this.context.player = player
     this.context.card = card
-    this.context.sourceContainer = hand
+    this.context.sourceContainer = hand as Hand
     this.context.targetContainer = pile
     this.finish()
   }

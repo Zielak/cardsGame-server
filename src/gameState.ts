@@ -12,16 +12,16 @@ export class GameState {
   maxClients: number
 
   clients = new PrimitiveMap<string>()
-  // Clients who are currently playing the game
-  players = new EntityMap<Player>()
 
   // FIXME: What is this exactly and how am I supposed to use it?
   @nosync
   playersOrder: Array<string> = []
 
-  cards = new EntityMap<BaseCard>()
-  elements = new EntityMap<Base>()
-  containers = new EntityMap<Container>()
+  elements = new EntityMap()
+
+  get players(): Player[] {
+    return this.elements.getByType('player')
+  }
 
   // Has the game started?
   private started = false
@@ -39,7 +39,7 @@ export class GameState {
 
   gameStart() {
     this.started = true
-    this._currentPlayer = this.players.list[this._currentPlayerIdx]
+    this._currentPlayer = this.players[this._currentPlayerIdx]
   }
 
   get hasStarted() {
@@ -55,7 +55,7 @@ export class GameState {
   }
 
   getPlayerByClientId(clientId: string): Player {
-    return this.players.list.find(player => {
+    return this.players.find(player => {
       return player.clientId === clientId
     })
   }
@@ -72,7 +72,7 @@ export class GameState {
       }
     }
     this._currentPlayerIdx = currIdx
-    this._currentPlayer = this.players.list[currIdx]
+    this._currentPlayer = this.players[currIdx]
     return this._currentPlayer
   }
 
@@ -88,7 +88,7 @@ export class GameState {
       }
     }
     this._currentPlayerIdx = currIdx
-    this._currentPlayer = this.players.list[currIdx]
+    this._currentPlayer = this.players[currIdx]
     return this._currentPlayer
   }
 
@@ -100,8 +100,8 @@ export class GameState {
     }
     while (--i) {
       const j = Math.floor(Math.random() * (i + 1))
-      const tempi = this.players.list[i]
-      const tempj = this.players.list[j]
+      const tempi = this.players[i]
+      const tempj = this.players[j]
       this.playersOrder[i] = tempj.id
       this.playersOrder[j] = tempi.id
       // Keep the current player the same
@@ -110,7 +110,7 @@ export class GameState {
       }
     }
     this._currentPlayerIdx = currIdx
-    this._currentPlayer = this.players.list[this.playersOrder[currIdx]]
+    this._currentPlayer = this.players[this.playersOrder[currIdx]]
   }
 
   reversePlayerOrder() {

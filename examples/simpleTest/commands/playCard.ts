@@ -14,7 +14,7 @@ export default class PlayCardCommand extends Command {
       const card = this.context.cardPlayed = Base.get(cardId)
 
       // TODO: getByName()
-      const pile = state.containers.list.find(el => el.name === 'pile')
+      const pile = state.elements.getByName('pile')[0]
       card.moveTo(pile)
       state.nextPlayer()
       resolve()

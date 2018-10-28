@@ -30,41 +30,34 @@ class ContainersTest<T extends GameState> extends GameRoom<T> implements IGameRo
       x: 150,
       y: 0
     })
-    this.state.containers.add(deck)
-    deck.addChildren(Presets.classicCards().map(card => {
-      this.state.cards.add(card)
-      return card
-    }))
+    this.state.elements.add(deck)
+    deck.addChildren(Presets.classicCards())
 
     const pile = new Pile({
       name: 'pile',
       x: 0,
       y: 0
     })
-    this.state.containers.add(pile)
+    this.state.elements.add(pile)
   }
 
   preparePlayer(player: Player) {
-    this.state.containers.add(
-      new Hand({
-        name: 'tmpHand',
-        parent: player,
-        x: 120, y: -80
-      })
-    )
-    this.state.containers.add(
-      new Hand({
-        name: 'mainHand',
-        parent: player,
-        x: 0, y: 0
-      })
-    )
+    new Hand({
+      name: 'tmpHand',
+      parent: player,
+      x: 120, y: -80
+    })
+    new Hand({
+      name: 'mainHand',
+      parent: player,
+      x: 0, y: 0
+    })
   }
 
   onStartGame() {
-    const hands = this.state.containers.getByName('mainHand')
-    const deck = this.state.containers.getByType('deck')[0] as Deck
-    const pile = this.state.containers.getByType('pile')
+    const hands = this.state.elements.getByName<Hand>('mainHand')
+    const deck = this.state.elements.getByType('deck')[0] as Deck
+    const pile = this.state.elements.getByType<Pile>('pile')
 
     deck.shuffle()
     deck.deal(hands, 5)
@@ -74,7 +67,6 @@ class ContainersTest<T extends GameState> extends GameRoom<T> implements IGameRo
   }
 
 }
-
 
 // This will init the server with one game type
 CreateGameServer([ContainersTest])
